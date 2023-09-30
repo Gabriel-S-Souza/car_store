@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 
+import '../../app_controller.dart';
+
 class ServiceLocator {
   static final ServiceLocator I = ServiceLocator._internal();
   late final GetIt _getIt;
@@ -11,19 +13,19 @@ class ServiceLocator {
     return I;
   }
 
-  void setup() async {
-    _getIt;
+  void setup() {
+    registerSingleton(AppController());
   }
 
-  T get<T extends Object>() {
-    throw UnimplementedError();
+  T get<T extends Object>() => _getIt.get<T>();
+
+  void registerFactory<T extends Object>(T Function() factory) {
+    _getIt.registerFactory<T>(factory);
   }
 
-  bool isRegistered<T extends Object>() {
-    throw UnimplementedError();
+  void registerSingleton<T extends Object>(T instance) {
+    _getIt.registerSingleton<T>(instance);
   }
 
-  void registerFactory<T extends Object>(T Function() factory) {}
-
-  void registerSingleton<T extends Object>(T instance) {}
+  bool isRegistered<T extends Object>() => _getIt.isRegistered<T>();
 }

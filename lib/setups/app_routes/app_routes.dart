@@ -5,6 +5,13 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/vehicle_store/presentation/screens/home_screen.dart';
 
+class RouteNames {
+  static const String login = '/login';
+  static const String signup = '/signup';
+  static const String vehicles = '/vehicles';
+  static const String details = '/vehicles/:id';
+}
+
 final appRouter = GoRouter(
   routes: [
     GoRoute(
@@ -30,12 +37,5 @@ final appRouter = GoRouter(
       ),
     ),
   ],
-  initialLocation: RouteNames.login,
+  initialLocation: RouteNames.vehicles,
 );
-
-class RouteNames {
-  static const String login = '/login';
-  static const String signup = '/signup';
-  static const String vehicles = '/vehicles';
-  static const String details = '/vehicles/:id';
-}
