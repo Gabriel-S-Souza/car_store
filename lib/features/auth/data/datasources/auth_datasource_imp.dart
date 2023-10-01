@@ -6,14 +6,15 @@ import '../../../../shared/domain/entities/failure.dart';
 import '../../../../shared/domain/entities/result.dart';
 import '../../domain/entities/user_entity.dart';
 import '../models/login_credentials_model.dart';
+import '../models/resister_user_model.dart';
 import '../models/user_entity.dart';
-import 'login_datasource.dart';
+import 'auth_datasource.dart';
 
-class LoginDataSourceImp implements LoginDataSource {
+class AuthDataSourceImp implements AuthDataSource {
   final HttpClient _httpClient;
   final SecureLocalStorage _secureLocalStorage;
 
-  LoginDataSourceImp({
+  AuthDataSourceImp({
     required HttpClient httpClient,
     required SecureLocalStorage secureLocalStorage,
   })  : _httpClient = httpClient,
@@ -31,7 +32,26 @@ class LoginDataSourceImp implements LoginDataSource {
         _secureLocalStorage.set(StorageKeys.refreshToken, response.data['refreshToken']);
         return Result.success(UserModel.fromJson(response.data['user']));
       } else {
-        return Result.failure(UnmappedFailure(response.data.toString()));
+        return Result.failure(UnmappedFailure(response.data['message']));
+      }
+    } on Failure catch (e) {
+      return Result.failure(e);
+    } catch (e) {
+      return Result.failure(UnmappedFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<VoidSuccess>> register(RegisterUserModel user) async {
+    try {
+      final response = await _httpClient.post(
+        ApiRoutes.signup,
+        body: user.toJson(),
+      );
+      if (response.isSuccess) {
+        return Result.voidSuccess();
+      } else {
+        return Result.failure(UnmappedFailure(response.data['message']));
       }
     } on Failure catch (e) {
       return Result.failure(e);

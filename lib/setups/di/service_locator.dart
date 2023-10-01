@@ -2,12 +2,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../features/auth/data/datasources/login_datasource.dart';
-import '../../features/auth/data/datasources/login_datasource_imp.dart';
-import '../../features/auth/data/repositories/login_repository_imp.dart';
+import '../../features/auth/data/datasources/auth_datasource.dart';
+import '../../features/auth/data/datasources/auth_datasource_imp.dart';
+import '../../features/auth/data/repositories/auth_repository_imp.dart';
 import '../../features/auth/domain/repositories/login_repository.dart';
-import '../../features/auth/domain/use_cases/login_case.dart';
+import '../../features/auth/domain/use_cases/login_use_case.dart';
+import '../../features/auth/domain/use_cases/register_use_case.dart';
 import '../../features/auth/presentation/blocs/login/login_bloc.dart';
+import '../../features/auth/presentation/blocs/register/register_user_bloc.dart';
 import '../../features/vehicle_store/data/data_sources/cache/vehicle_caching_data_source_imp.dart';
 import '../../features/vehicle_store/data/data_sources/remoto/vehicle_data_source.dart';
 import '../../features/vehicle_store/data/data_sources/remoto/vehicle_data_source_imp.dart';
@@ -61,8 +63,8 @@ class ServiceLocator {
       ),
     );
 
-    registerFactory<LoginDataSource>(
-      () => LoginDataSourceImp(
+    registerFactory<AuthDataSource>(
+      () => AuthDataSourceImp(
         httpClient: get(),
         secureLocalStorage: get(),
       ),
@@ -75,9 +77,9 @@ class ServiceLocator {
       ),
     );
 
-    registerFactory<LoginRepository>(
-      () => LoginRepositoryImp(
-        loginDataSource: get(),
+    registerFactory<AuthRepository>(
+      () => AuthRepositoryImp(
+        authDataSource: get(),
       ),
     );
 
@@ -96,16 +98,40 @@ class ServiceLocator {
 
     registerFactory<LoginUseCase>(
       () => LoginUseCaseImp(
-        loginRepository: get(),
+        authRepository: get(),
+      ),
+    );
+
+    registerFactory<RegisterUserUseCase>(
+      () => RegisterUserUseCaseImp(
+        authRepository: get(),
       ),
     );
 
     // Blocs
-    registerFactory<HomeBloc>(() => HomeBloc(getVehicles: get()));
+    registerFactory<HomeBloc>(
+      () => HomeBloc(
+        getVehicles: get(),
+      ),
+    );
 
-    registerFactory<VehicleDetailsBloc>(() => VehicleDetailsBloc(getVehicleDetails: get()));
+    registerFactory<VehicleDetailsBloc>(
+      () => VehicleDetailsBloc(
+        getVehicleDetails: get(),
+      ),
+    );
 
-    registerFactory<LoginBloc>(() => LoginBloc(login: get()));
+    registerFactory<LoginBloc>(
+      () => LoginBloc(
+        login: get(),
+      ),
+    );
+
+    registerFactory<RegisterUserBloc>(
+      () => RegisterUserBloc(
+        registerUser: get(),
+      ),
+    );
   }
 
   T get<T extends Object>() => _getIt.get<T>();

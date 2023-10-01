@@ -25,6 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
   final _loginCubit = ServiceLocator.I.get<LoginBloc>();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _loginCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
           body: BlocProvider<LoginBloc>(
@@ -38,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.all(16),
                     children: [
                       const Text(
-                        'Car Store',
+                        'Login',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 28,
@@ -73,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: validatePassword,
                         textInputAction: TextInputAction.done,
                         suffix: IconButton(
-                          onPressed: () => _loginCubit.showPassword(!state.hidePassword),
+                          onPressed: () => _loginCubit.hidePassword(!state.hidePassword),
                           icon: Icon(
                             state.hidePassword ? Icons.visibility_off : Icons.visibility,
                           ),
@@ -129,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'A senha é obrigatória';
-    } else if (value.length <= 8 ||
+    } else if (value.length < 8 ||
         !value.contains(RegExp(r'[A-Z]')) ||
         !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')) ||
         !value.contains(RegExp(r'[0-9]'))) {
