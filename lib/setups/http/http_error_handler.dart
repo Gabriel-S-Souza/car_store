@@ -9,7 +9,7 @@ mixin HttpErrorHandler {
     if (e is! DioException) return UnmappedFailure(e.toString());
 
     if (e.response != null && e.response!.statusCode != null) {
-      final error = _handleErrorByStatusCode(e.response!.statusCode);
+      final error = _handleErrorByStatusCode(e);
       if (error != null) {
         return error;
       }
@@ -18,16 +18,27 @@ mixin HttpErrorHandler {
     return _handleErrorByType(e);
   }
 
-  Failure? _handleErrorByStatusCode(int? statusCode) {
+  Failure? _handleErrorByStatusCode(DioException e) {
+    final statusCode = e.response!.statusCode;
+    final String? message;
+
+    if (e.response!.data is Map && e.response!.data.containsKey('message')) {
+      message = e.response!.data['message'] is String
+          ? e.response!.data['message']
+          : e.response!.statusMessage;
+    } else {
+      message = null;
+    }
+
     switch (statusCode) {
       case 400:
-        return const BadRequestFailure();
+        return BadRequestFailure(message);
       case 401:
-        return const UnauthorizedFailure();
+        return UnauthorizedFailure(message);
       case 404:
-        return const NotFoundFailure();
+        return NotFoundFailure(message);
       case 500:
-        return const ServerFailure();
+        return ServerFailure(message);
       default:
         return null;
     }
@@ -41,6 +52,7 @@ mixin HttpErrorHandler {
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.badResponse:
         return ServerFailure(e.message);
+      case DioExceptionType.connectionError:
       case DioExceptionType.unknown:
         if (e.error is SocketException &&
             e.error.toString().toLowerCase().contains('network is unreachable')) {

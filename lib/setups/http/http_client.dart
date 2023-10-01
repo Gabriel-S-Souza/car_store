@@ -12,15 +12,15 @@ class HttpClient with HttpErrorHandler {
 
   Future<ResponseApp> get(
     String url, {
-    String? token,
+    String? accessToken,
   }) async {
     try {
       final response = await _dio.get(
         url,
-        options: token != null
+        options: accessToken != null
             ? Options(
                 headers: {
-                  HttpHeaders.authorizationHeader: 'Bearer $token',
+                  HttpHeaders.authorizationHeader: 'Bearer $accessToken',
                 },
               )
             : null,
@@ -34,16 +34,16 @@ class HttpClient with HttpErrorHandler {
   Future<ResponseApp> post(
     String path, {
     required Map<String, dynamic> body,
-    String? token,
+    String? accessToken,
   }) async {
     try {
       final response = await _dio.post(
         path,
         data: body,
-        options: token != null
+        options: accessToken != null
             ? Options(
                 headers: {
-                  HttpHeaders.authorizationHeader: 'Bearer $token',
+                  HttpHeaders.authorizationHeader: 'Bearer $accessToken',
                 },
               )
             : null,
@@ -57,16 +57,16 @@ class HttpClient with HttpErrorHandler {
   Future<ResponseApp> put(
     String path, {
     required Map<String, dynamic> body,
-    String? token,
+    String? accessToken,
   }) async {
     try {
       final response = await _dio.put(
         path,
         data: body,
-        options: token != null
+        options: accessToken != null
             ? Options(
                 headers: {
-                  HttpHeaders.authorizationHeader: 'Bearer $token',
+                  HttpHeaders.authorizationHeader: 'Bearer $accessToken',
                 },
               )
             : null,
@@ -79,15 +79,15 @@ class HttpClient with HttpErrorHandler {
 
   Future<ResponseApp> delete(
     String path, {
-    String? token,
+    String? accessToken,
   }) async {
     try {
       final response = await _dio.delete(
         path,
-        options: token != null
+        options: accessToken != null
             ? Options(
                 headers: {
-                  HttpHeaders.authorizationHeader: 'Bearer $token',
+                  HttpHeaders.authorizationHeader: 'Bearer $accessToken',
                 },
               )
             : null,

@@ -34,6 +34,7 @@ Future<void> checkToken(
       handler.next(options);
     }
   }
+  handler.next(options);
 }
 
 bool _isTokenExpired(String? token) {

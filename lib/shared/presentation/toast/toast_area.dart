@@ -2,25 +2,36 @@ import 'package:flutter/material.dart';
 
 import 'toast_controller.dart';
 
-class ToastArea extends StatelessWidget {
+class ToastArea extends StatefulWidget {
   final ToastBehavior behavior;
   final double minHeight;
   final Widget? child;
 
   const ToastArea({
     super.key,
-    this.behavior = ToastBehavior.floating,
+    this.behavior = ToastBehavior.pinnedDown,
     this.minHeight = 50,
     this.child,
   });
 
   @override
+  State<ToastArea> createState() => _ToastAreaState();
+}
+
+class _ToastAreaState extends State<ToastArea> {
+  @override
+  void initState() {
+    super.initState();
+    Toast.initialize();
+  }
+
+  @override
   Widget build(BuildContext context) => Stack(
         textDirection: TextDirection.ltr,
         children: [
-          child ?? const SizedBox(),
+          widget.child ?? const SizedBox(),
           _ToastArea(
-            behavior: behavior,
+            behavior: widget.behavior,
             minHeight: 50,
           ),
         ],
@@ -78,7 +89,6 @@ class __ToastHandlerWidget extends State<_ToastHandlerWidget> with TickerProvide
   @override
   void initState() {
     super.initState();
-    Toast.initialize();
     _listenToastStream();
     _listenToastCustomNotifier();
     _initializeAnimation();
@@ -348,25 +358,25 @@ class __ToastWidgetState extends State<_ToastWidget> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            constraints: BoxConstraints(
-                              minHeight: widget.toastMinHeight,
-                            ),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: widget.toastData.backgroundColor
-                                      ?.withOpacity(widget.toastData.opacity) ??
-                                  Colors.black.withOpacity(widget.toastData.opacity),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(24),
+                          Flexible(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: widget.toastData.backgroundColor
+                                        ?.withOpacity(widget.toastData.opacity) ??
+                                    Colors.black.withOpacity(widget.toastData.opacity),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(24),
+                                ),
                               ),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            child: Text(
-                              widget.toastData.message,
-                              style: TextStyle(
-                                color: widget.toastData.textColor ?? Colors.white,
-                                fontSize: 16,
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: Text(
+                                widget.toastData.message,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: widget.toastData.textColor ?? Colors.white,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),
