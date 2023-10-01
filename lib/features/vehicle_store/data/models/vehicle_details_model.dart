@@ -20,13 +20,14 @@ class VehicleDetailsModel extends VehicleDetailsEntity {
         name: json['name'] as String,
         brand: json['brand'] as String,
         model: json['model'] as String,
-        image: _decodeImage(json['image'] as List<int>),
-        price: json['price'] as double,
+        image: _decodeImage((json['image'] as String).codeUnits),
+        price: json['price'] is int ? (json['price'] as int).toDouble() : json['price'] as double,
         description: json['description'] as String,
-        additionalInformations: (json['additionalInformations'] as List<dynamic>)
-            .map(
-              (e) => e as Map<String, String>,
-            )
+        additionalInformations: (json['additionalInformations'] as List)
+            .map((e) => {
+                  'key': e['key'].toString(),
+                  'value': e['value'].toString(),
+                })
             .toList(),
       );
 
@@ -42,12 +43,12 @@ class VehicleDetailsModel extends VehicleDetailsEntity {
 
   static Uint8List _decodeImage(List<int> imageData) {
     final base64String = String.fromCharCodes(imageData);
-    return base64Decode(base64String.replaceAll('data:image/png;base64,', ''));
+    return base64Decode(
+        base64String.replaceAll(RegExp(r'data:image\/(webp|png|jpeg|jpg);base64,'), ''));
   }
 
-  List<int> _encodeImage(Uint8List img) {
+  String _encodeImage(Uint8List img) {
     final base64String = base64Encode(img);
-    final encodedImage = 'data:image/png;base64,$base64String';
-    return encodedImage.codeUnits;
+    return 'data:image/png;base64,$base64String';
   }
 }

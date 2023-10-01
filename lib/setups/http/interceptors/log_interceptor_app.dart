@@ -27,30 +27,32 @@ class LogInterceptorApp extends LogInterceptor {
         response.data.isNotEmpty &&
         response.data?.first is Map &&
         response.data.first.containsKey('image')) {
-      final RequestOptions optionsLog = response.requestOptions.copyWith();
-      optionsLog.data = null;
-      optionsLog.data = jsonDecode(jsonEncode(response.data));
-      final vehicles = List<Map>.from(optionsLog.data);
-      final modifiedVehicles = vehicles
-          .map((vehicle) => {
-                ...vehicle,
-                'image': '...REMOVED_TO_LOG...',
-              })
-          .toList();
-
-      optionsLog.data = modifiedVehicles;
-
-      _printAll(optionsLog.data);
+      final data = _deepCopyData(response);
+      final dataWithoutImage = data.map((vehicle) => _hideImage(vehicle)).toList();
+      _printAll(dataWithoutImage);
+    } else if (response.data is Map && response.data.containsKey('image')) {
+      final data = _deepCopyData(response);
+      final vehicle = _hideImage(data);
+      _printAll(vehicle);
+    } else {
+      _printAll(response.data);
     }
     super.onResponse(response, handler);
   }
-}
 
-void _printAll(msg) {
-  _logPrint('*** Response Body ***');
-  msg.toString().split('\n').forEach(_logPrint);
-}
+  void _printAll(msg) {
+    _logPrint('*** Response Body ***');
+    msg.toString().split('\n').forEach(_logPrint);
+  }
 
-void _logPrint(msg) {
-  kDebugMode ? print(msg.toString()) : debugPrint(msg.toString());
+  void _logPrint(msg) {
+    kDebugMode ? print(msg.toString()) : debugPrint(msg.toString());
+  }
+
+  Map<String, dynamic> _hideImage(Map<dynamic, dynamic> vehicle) => {
+        ...vehicle,
+        'image': '...REMOVED_TO_LOG...',
+      };
+
+  dynamic _deepCopyData(Response response) => jsonDecode(jsonEncode(response.data));
 }

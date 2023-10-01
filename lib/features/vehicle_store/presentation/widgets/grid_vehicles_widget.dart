@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../domain/entities/vehicle_entity.dart';
 import 'vehicle_card_widget.dart';
@@ -23,7 +24,11 @@ class GridVehiclesWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 24),
       itemCount: isLoading ? vehicles.length + 1 : vehicles.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+        crossAxisCount: ResponsiveBreakpoints.of(context).screenWidth >= 580
+            ? orientation == Orientation.portrait
+                ? 2
+                : 3
+            : 2,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
         childAspectRatio: 0.82,

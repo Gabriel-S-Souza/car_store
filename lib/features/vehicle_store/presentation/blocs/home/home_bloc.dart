@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../shared/domain/entities/failure.dart';
-import '../../../../shared/presentation/toast/toast_controller.dart';
-import '../../domain/use_cases/vehicle_use_case.dart';
+import '../../../../../shared/domain/entities/failure.dart';
+import '../../../../../shared/presentation/toast/toast_controller.dart';
+import '../../../domain/use_cases/get_vehicle_use_case.dart';
 import 'home_state.dart';
 
 class HomeBloc extends Cubit<HomeState> {

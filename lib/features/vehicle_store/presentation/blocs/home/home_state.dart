@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../domain/entities/vehicle_entity.dart';
+import '../../../domain/entities/vehicle_entity.dart';
 
 class HomeState extends Equatable {
   final List<VehicleEntity> vehicles;
