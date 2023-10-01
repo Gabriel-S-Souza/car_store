@@ -28,116 +28,105 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Car Store'),
-          centerTitle: true,
-          leading: !context.canPop()
-              ? IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    context.goNamed(RouteNames.vehicles);
-                  },
-                )
-              : null,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () {
-                context.goNamed(RouteNames.login);
-              },
-            ),
-          ],
-        ),
-        body: ResponsiveScaledBox(
-          width: null,
-          child: BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
-            bloc: vehicleDetailsBloc,
-            builder: (context, state) {
-              if (state is VehicleDetailsLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (state is VehicleDetailsSuccess) {
-                return ListView(
-                  children: [
-                    Column(
-                      children: [
-                        FractionallySizedBox(
-                          widthFactor: 1,
-                          child: Image.memory(
-                            state.details.image,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    BrandAndNameWidget(
-                      brand: state.details.brand,
-                      name: state.details.name,
-                    ),
-                    const SizedBox(height: 10),
-                    DescriptionWidget(description: state.details.description),
-                    const SizedBox(height: 10),
-                    PriceWidget(price: state.details.price),
-                    const SizedBox(height: 20),
-                    const Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Informações adicionais',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                            blurRadius: 6.0,
-                            blurStyle: BlurStyle.outer,
-                            offset: const Offset(0, 3),
+  Widget build(BuildContext context) => BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
+        bloc: vehicleDetailsBloc,
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(
+              title: Text(state is VehicleDetailsSuccess ? state.details.name : 'Car Store'),
+              centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => context.goNamed(RouteName.vehicles.name),
+              )),
+          body: ResponsiveScaledBox(
+            width: null,
+            child: Builder(
+              builder: (context) {
+                if (state is VehicleDetailsLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (state is VehicleDetailsSuccess) {
+                  return ListView(
+                    children: [
+                      Column(
+                        children: [
+                          FractionallySizedBox(
+                            widthFactor: 1,
+                            child: Image.memory(
+                              state.details.image,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
                           ),
                         ],
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: state.details.additionalInformations
-                            .asMap()
-                            .entries
-                            .map(
-                              (MapEntry<int, Map<String, String>> entry) => InformationRowWidget(
-                                ikey: entry.value['key'] ?? 'not found',
-                                value: entry.value['value'] ?? 'not found',
-                                rowColor: entry.key.isEven
-                                    ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
-                                    : Theme.of(context).cardColor,
-                              ),
-                            )
-                            .toList(),
+                      const SizedBox(height: 20),
+                      BrandAndNameWidget(
+                        brand: state.details.brand,
+                        name: state.details.name,
                       ),
-                    ),
-                    const SizedBox(height: 28),
-                  ],
-                );
-              }
-              if (state is VehicleDetailsError) {
-                return Center(
-                  child: Text(state.message),
-                );
-              }
-              return const SizedBox();
-            },
+                      const SizedBox(height: 10),
+                      DescriptionWidget(description: state.details.description),
+                      const SizedBox(height: 10),
+                      PriceWidget(price: state.details.price),
+                      const SizedBox(height: 20),
+                      const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Informações adicionais',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12.0),
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                              blurRadius: 6.0,
+                              blurStyle: BlurStyle.outer,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: state.details.additionalInformations
+                              .asMap()
+                              .entries
+                              .map(
+                                (MapEntry<int, Map<String, String>> entry) => InformationRowWidget(
+                                  ikey: entry.value['key'] ?? 'not found',
+                                  value: entry.value['value'] ?? 'not found',
+                                  rowColor: entry.key.isEven
+                                      ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
+                                      : Theme.of(context).cardColor,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+                    ],
+                  );
+                }
+                if (state is VehicleDetailsError) {
+                  return Center(
+                    child: Text(state.message),
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
           ),
         ),
       );

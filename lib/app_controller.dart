@@ -6,11 +6,17 @@ class AppController extends ChangeNotifier {
   static final AppController I = AppController._internal();
   AppController._internal();
 
-  Roles _role = Roles.user;
-  Roles get role => _role;
+  Roles role = Roles.visitor;
+  int navBarCurrentIndex = 0;
 
   void setRole(Roles newRole) {
-    _role = newRole;
+    role = newRole;
+    notifyListeners();
+  }
+
+  void setNavBarIndex(int index) async {
+    if (index == navBarCurrentIndex) return;
+    navBarCurrentIndex = index;
     notifyListeners();
   }
 }

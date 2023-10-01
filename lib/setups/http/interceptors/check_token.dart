@@ -7,10 +7,11 @@ Future<void> checkToken(
   RequestOptions options,
   RequestInterceptorHandler handler,
 ) async {
-  if (options.method == 'POST' ||
-      options.method == 'PUT' ||
-      options.method == 'PATCH' ||
-      options.method == 'DELETE') {
+  if ((options.method == 'POST' ||
+          options.method == 'PUT' ||
+          options.method == 'PATCH' ||
+          options.method == 'DELETE') &&
+      options.path.contains('vehicles')) {
     final authorization = options.headers['authorization'] as String?;
     final token = authorization?.split(' ').lastOrNull;
     log('Check token: $token');
