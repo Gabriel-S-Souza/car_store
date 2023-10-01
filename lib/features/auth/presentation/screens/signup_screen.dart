@@ -11,6 +11,11 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  // Toast.show(
+  //       'A senha deve conter pelo menos 8 carácteres e conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
+  //       duration: const Duration(seconds: 5),
+  //     );
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -27,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  context.go(RouteNames.login);
+                  context.go(RouteName.login.name);
                 },
                 child: const Text('SignUp'),
               ),

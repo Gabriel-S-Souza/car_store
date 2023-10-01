@@ -37,9 +37,7 @@ class GridVehiclesWidget extends StatelessWidget {
           ? VehicleCardWidget.inLoading()
           : VehicleCardWidget(
               vehicle: vehicles[index],
-              onTap: () => onVehicleTap(
-                vehicles[index],
-              ),
+              onTap: () => onVehicleTap(vehicles[index]),
             ),
     );
   }
