@@ -8,8 +8,9 @@ import '../../features/vehicle_store/data/data_sources/remoto/vehicle_data_sourc
 import '../../features/vehicle_store/data/repositories/vehicle_repository_imp.dart';
 import '../../features/vehicle_store/domain/repositories/vehicle_repository.dart';
 import '../../features/vehicle_store/domain/use_cases/get_vehicle_details_use_case.dart';
-import '../../features/vehicle_store/domain/use_cases/vehicle_use_case.dart';
-import '../../features/vehicle_store/presentation/blocs/home_bloc.dart';
+import '../../features/vehicle_store/domain/use_cases/get_vehicle_use_case.dart';
+import '../../features/vehicle_store/presentation/blocs/details/vehicle_detail_bloc.dart';
+import '../../features/vehicle_store/presentation/blocs/home/home_bloc.dart';
 import '../../shared/data/data_sources/local_storage/local_storage_data_source.dart';
 import '../../shared/data/data_sources/local_storage/local_storage_imp.dart';
 import '../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
@@ -76,6 +77,8 @@ class ServiceLocator {
 
     // Blocs
     registerFactory<HomeBloc>(() => HomeBloc(getVehicles: get()));
+
+    registerFactory<VehicleDetailsBloc>(() => VehicleDetailsBloc(getVehicleDetails: get()));
   }
 
   T get<T extends Object>() => _getIt.get<T>();

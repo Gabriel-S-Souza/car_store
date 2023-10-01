@@ -3,7 +3,7 @@ import '../entities/vehicle_details_entity.dart';
 import '../repositories/vehicle_repository.dart';
 
 abstract class GetVehicleDetailsUseCase {
-  Future<Result<VehicleDetailsEntity>> getDetails(int vehicleId);
+  Future<Result<VehicleDetailsEntity>> call(int vehicleId);
 }
 
 class GetVehicleDetailsUseCaseImp implements GetVehicleDetailsUseCase {
@@ -14,6 +14,6 @@ class GetVehicleDetailsUseCaseImp implements GetVehicleDetailsUseCase {
   }) : _vehicleRepository = vehicleRepository;
 
   @override
-  Future<Result<VehicleDetailsEntity>> getDetails(int vehicleId) =>
+  Future<Result<VehicleDetailsEntity>> call(int vehicleId) =>
       _vehicleRepository.getDetails(vehicleId);
 }

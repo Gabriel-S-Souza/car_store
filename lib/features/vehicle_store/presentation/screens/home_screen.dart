@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import '../../../../setups/app_routes/app_routes.dart';
-import '../../../../setups/service_locator/service_locator.dart';
-import '../blocs/home_bloc.dart';
-import '../blocs/home_state.dart';
+import '../../../../setups/di/service_locator.dart';
+import '../blocs/home/home_bloc.dart';
+import '../blocs/home/home_state.dart';
 import '../widgets/grid_vehicles_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
             bloc: bloc,
             builder: (context, state) => LazyLoadScrollView(
               isLoading: state.isLoading,
-              // scrollOffset: 300,
               onEndOfPage: () {
                 if (!state.isLoading &&
                     state.errorMessage?.contains('Não há mais veículos') != true) {
@@ -56,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 isLoading: state.isLoading,
                 vehicles: state.vehicles,
                 onVehicleTap: (vehicle) {
-                  context.pushNamed(
+                  context.goNamed(
                     RouteNames.details,
                     pathParameters: {'vehicleId': vehicle.id.toString()},
                   );
