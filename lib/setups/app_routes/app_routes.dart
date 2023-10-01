@@ -28,11 +28,12 @@ final appRouter = GoRouter(
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '${RouteNames.vehicles}/:id',
+      path: '${RouteNames.vehicles}/:vehicleId',
       name: RouteNames.details,
       builder: (context, state) => Scaffold(
         body: Center(
-          child: Text('Details of vehicle: ${state.pathParameters['id'] ?? 'id not found'}'),
+          child: Text(
+              'Details of vehicle: ${state.pathParameters['vehicleId'] ?? 'vehicleId not found'}'),
         ),
       ),
     ),

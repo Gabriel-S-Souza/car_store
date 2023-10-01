@@ -11,8 +11,7 @@ class SecureLocalStorageImp implements SecureLocalStorage {
   @override
   Future<String?> get(String key) async {
     try {
-      final res = await _storage.read(key: key);
-      return res;
+      return _storage.read(key: key);
     } catch (e) {
       return null;
     }
