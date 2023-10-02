@@ -188,8 +188,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         !value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')) ||
         !value.contains(RegExp(r'[0-9]'))) {
       Toast.show(
-        'A senha deve conter pelo menos 8 carácteres e conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
-        duration: const Duration(seconds: 5),
+        'A senha deve conter pelo menos 8 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial',
+        duration: const Duration(seconds: 6),
       );
       return 'Senha inválida';
     }
