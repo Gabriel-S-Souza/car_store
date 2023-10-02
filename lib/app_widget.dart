@@ -18,13 +18,10 @@ class AppWidget extends StatelessWidget {
             colorScheme: const ColorScheme.dark(),
           ),
           builder: (context, child) => ResponsiveBreakpoints.builder(
-            child: Stack(
-              children: [GlobalScaffoldWidget(child: child!)],
-            ),
+            child: GlobalScaffoldWidget(child: child!),
             breakpoints: [
-              const Breakpoint(start: 0, end: 450, name: MOBILE),
-              const Breakpoint(start: 450, end: 1920, name: DESKTOP),
-              const Breakpoint(start: 1921, end: 4000, name: '4K'),
+              const Breakpoint(start: 0, end: 550, name: MOBILE),
+              const Breakpoint(start: 550, end: 4000, name: DESKTOP),
             ],
           ),
         ),

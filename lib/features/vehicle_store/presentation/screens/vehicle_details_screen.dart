@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
 import '../blocs/details/vehicle_detail_bloc.dart';
 import '../blocs/details/vehicle_detail_state.dart';
@@ -19,24 +18,30 @@ class VehicleDetailsScreen extends StatefulWidget {
 }
 
 class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
-  final vehicleDetailsBloc = ServiceLocator.I.get<VehicleDetailsBloc>();
+  final bloc = ServiceLocator.I.get<VehicleDetailsBloc>();
 
   @override
   void initState() {
     super.initState();
-    vehicleDetailsBloc.getDetails(widget.vehicleId);
+    bloc.getDetails(widget.vehicleId);
+  }
+
+  @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
-        bloc: vehicleDetailsBloc,
+        bloc: bloc,
         builder: (context, state) => Scaffold(
           appBar: AppBar(
               title: Text(state is VehicleDetailsSuccess ? state.details.name : 'Car Store'),
               centerTitle: true,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.goNamed(RouteName.vehicles.name),
+                onPressed: () => context.pop(),
               )),
           body: ResponsiveScaledBox(
             width: null,
@@ -68,9 +73,9 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                         name: state.details.name,
                       ),
                       const SizedBox(height: 10),
-                      DescriptionWidget(description: state.details.description),
+                      _DescriptionWidget(description: state.details.description),
                       const SizedBox(height: 10),
-                      PriceWidget(price: state.details.price),
+                      _PriceWidget(price: state.details.price),
                       const SizedBox(height: 20),
                       const Align(
                         alignment: Alignment.center,
@@ -104,7 +109,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                               .asMap()
                               .entries
                               .map(
-                                (MapEntry<int, Map<String, String>> entry) => InformationRowWidget(
+                                (MapEntry<int, Map<String, String>> entry) => _InformationRowWidget(
                                   ikey: entry.value['key'] ?? 'not found',
                                   value: entry.value['value'] ?? 'not found',
                                   rowColor: entry.key.isEven
@@ -152,10 +157,10 @@ class BrandAndNameWidget extends StatelessWidget {
       );
 }
 
-class DescriptionWidget extends StatelessWidget {
+class _DescriptionWidget extends StatelessWidget {
   final String description;
 
-  const DescriptionWidget({super.key, required this.description});
+  const _DescriptionWidget({Key? key, required this.description}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -171,10 +176,10 @@ class DescriptionWidget extends StatelessWidget {
       );
 }
 
-class PriceWidget extends StatelessWidget {
+class _PriceWidget extends StatelessWidget {
   final double price;
 
-  const PriceWidget({super.key, required this.price});
+  const _PriceWidget({Key? key, required this.price}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Align(
@@ -202,12 +207,12 @@ class PriceWidget extends StatelessWidget {
       );
 }
 
-class InformationRowWidget extends StatelessWidget {
+class _InformationRowWidget extends StatelessWidget {
   final String ikey;
   final String value;
   final Color rowColor;
 
-  const InformationRowWidget({
+  const _InformationRowWidget({
     Key? key,
     required this.ikey,
     required this.value,
