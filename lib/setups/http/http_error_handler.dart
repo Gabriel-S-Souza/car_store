@@ -35,8 +35,12 @@ mixin HttpErrorHandler {
         return BadRequestFailure(message);
       case 401:
         return UnauthorizedFailure(message);
+      case 403:
+        return ForbiddenFailure(message);
       case 404:
         return NotFoundFailure(message);
+      case 409:
+        return ServerFailure(message);
       case 500:
         return ServerFailure(message);
       default:
@@ -45,22 +49,32 @@ mixin HttpErrorHandler {
   }
 
   Failure _handleErrorByType(DioException e) {
+    final String? message;
+
+    if (e.response!.data is Map && e.response!.data.containsKey('message')) {
+      message = e.response!.data['message'] is String
+          ? e.response!.data['message']
+          : e.response!.statusMessage;
+    } else {
+      message = e.message;
+    }
+
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
         return const OfflineFailure();
       case DioExceptionType.cancel:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.badResponse:
-        return ServerFailure(e.message);
+        return ServerFailure(message);
       case DioExceptionType.connectionError:
       case DioExceptionType.unknown:
         if (e.error is SocketException &&
             e.error.toString().toLowerCase().contains('network is unreachable')) {
           return const OfflineFailure();
         }
-        return UnmappedFailure(e.message);
+        return UnmappedFailure(message);
       default:
-        return UnmappedFailure(e.message);
+        return UnmappedFailure(message);
     }
   }
 }

@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
-import '../../../../app_controller.dart';
 import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
-import '../../../../shared/presentation/toast/toast_controller.dart';
 import '../blocs/home/home_bloc.dart';
 import '../blocs/home/home_state.dart';
 import '../widgets/grid_vehicles_widget.dart';
@@ -24,7 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Toast.show('User role: ${AppController.I.role}');
     bloc.getVehicles(1);
   }
 

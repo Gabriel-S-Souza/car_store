@@ -28,7 +28,7 @@ class GlobalScaffoldWidget extends StatelessWidget {
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.admin_panel_settings),
+                      icon: Icon(Icons.person),
                       label: 'Admin',
                     ),
                   ],
