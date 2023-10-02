@@ -9,7 +9,7 @@ class ToastArea extends StatefulWidget {
 
   const ToastArea({
     super.key,
-    this.behavior = ToastBehavior.pinnedDown,
+    this.behavior = ToastBehavior.floating,
     this.minHeight = 50,
     this.child,
   });
@@ -357,19 +357,22 @@ class __ToastWidgetState extends State<_ToastWidget> {
                       width: MediaQuery.of(context).size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Flexible(
+                          Center(
                             child: Container(
-                              alignment: Alignment.center,
+                              constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width * 0.8,
+                              ),
                               decoration: BoxDecoration(
                                 color: widget.toastData.backgroundColor
                                         ?.withOpacity(widget.toastData.opacity) ??
                                     Colors.black.withOpacity(widget.toastData.opacity),
                                 borderRadius: const BorderRadius.all(
-                                  Radius.circular(24),
+                                  Radius.circular(40),
                                 ),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                               child: Text(
                                 widget.toastData.message,
                                 textAlign: TextAlign.center,
