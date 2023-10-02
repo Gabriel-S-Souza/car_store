@@ -19,8 +19,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(text: 'mia@teste.com');
+  final TextEditingController _passwordController = TextEditingController(text: '@Mia1234');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _loginCubit = ServiceLocator.I.get<LoginBloc>();
 
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _emailController.text, _passwordController.text);
 
                             if (_loginCubit.state.user != null && mounted) {
-                              AppController.I.setRole(_loginCubit.state.user!.roles);
+                              AppController.I.setUser(_loginCubit.state.user!);
                               AppController.I.setNavBarIndex(0);
                               context.goNamed(RouteName.vehicles.name);
                             }

@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
+import '../../../../app_controller.dart';
 import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
+import '../../../../shared/domain/entities/roles.dart';
+import '../../../../shared/presentation/widgets/header_screen_widget.dart';
 import '../blocs/home/home_bloc.dart';
 import '../blocs/home/home_state.dart';
 import '../widgets/grid_vehicles_widget.dart';
@@ -23,6 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     bloc.getVehicles(1);
+    // AppRouter.router.routerDelegate.addListener(() {
+    //   log(AppRouter.router.routerDelegate.currentConfiguration.uri.toString());
+    // });
   }
 
   @override
@@ -33,12 +39,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text('Car Store'),
+        appBar: HeaderScreenWidget(
+          title: 'Car Store',
+          onSecondaryTap: AppController.I.user.role == Roles.admin
+              ? () {
+                  AppController.I.setNavBarIndex(1);
+                  AppController.I.logout();
+                  context.goNamed(RouteName.login.name);
+                }
+              : null,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0).copyWith(top: 0),
           child: BlocBuilder<HomeBloc, HomeState>(
             bloc: bloc,
             builder: (context, state) => LazyLoadScrollView(
@@ -62,5 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+        floatingActionButton: AppController.I.user.role == Roles.admin
+            ? FloatingActionButton(
+                onPressed: () => context.goNamed(RouteName.createVehicle.name),
+                child: const Icon(Icons.add),
+              )
+            : null,
       );
 }

@@ -3,15 +3,21 @@ import 'package:flutter/material.dart';
 
 class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final VoidCallback? onBackButtonTap;
+  final VoidCallback? onPrimaryTap;
+  final VoidCallback? onSecondaryTap;
+  final IconData? primaryIcon;
+  final IconData? secondaryIcon;
   final double fontSize;
   final bool centerTitle;
 
   const HeaderScreenWidget({
     Key? key,
     required this.title,
-    this.onBackButtonTap,
-    this.fontSize = 16,
+    this.onPrimaryTap,
+    this.onSecondaryTap,
+    this.primaryIcon,
+    this.secondaryIcon,
+    this.fontSize = 20,
     this.centerTitle = true,
   }) : super(key: key);
 
@@ -21,21 +27,23 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (onBackButtonTap != null)
+            if (onPrimaryTap == null && onSecondaryTap != null) const Spacer(),
+            if (onPrimaryTap != null)
               Flexible(
                 fit: FlexFit.loose,
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: const Alignment(-1, 0.35),
                   child: Visibility(
-                    visible: onBackButtonTap != null,
+                    visible: onPrimaryTap != null,
                     child: IconButton(
-                      onPressed: onBackButtonTap,
+                      onPressed: onPrimaryTap,
+                      tooltip: 'Voltar',
                       visualDensity: VisualDensity.compact,
                       splashRadius: 28,
                       icon: Transform.translate(
-                        offset: const Offset(-2, 0),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
+                        offset: const Offset(3, 0),
+                        child: Icon(
+                          primaryIcon ?? Icons.arrow_back_ios,
                           size: 24,
                         ),
                       ),
@@ -45,7 +53,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
               ),
             Expanded(
               child: Align(
-                alignment: centerTitle ? Alignment.center : Alignment.centerLeft,
+                alignment: centerTitle ? const Alignment(0, 0.22) : const Alignment(-1, 0.22),
                 child: AutoSizeText(
                   title,
                   maxFontSize: fontSize,
@@ -58,7 +66,27 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
                 ),
               ),
             ),
-            if (onBackButtonTap != null) const Spacer(),
+            if (onSecondaryTap != null)
+              Flexible(
+                fit: FlexFit.loose,
+                child: Align(
+                  alignment: const Alignment(1, 0.35),
+                  child: Visibility(
+                    visible: onSecondaryTap != null,
+                    child: IconButton(
+                      onPressed: onSecondaryTap,
+                      tooltip: 'Sair',
+                      visualDensity: VisualDensity.compact,
+                      splashRadius: 28,
+                      icon: Icon(
+                        secondaryIcon ?? Icons.logout,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (onPrimaryTap != null && onSecondaryTap == null) const Spacer(),
           ],
         ),
       );

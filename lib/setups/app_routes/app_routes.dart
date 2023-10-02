@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
+import '../../features/vehicle_store/presentation/screens/create_vehicle_screen.dart';
 import '../../features/vehicle_store/presentation/screens/home_screen.dart';
 import '../../features/vehicle_store/presentation/screens/vehicle_details_screen.dart';
 
@@ -9,7 +10,8 @@ enum RouteName {
   login('/login'),
   signup('/signup'),
   vehicles('/vehicles'),
-  details('/details');
+  details('/details'),
+  createVehicle('create-vehicle');
 
   final String name;
 
@@ -24,6 +26,7 @@ class AppRouter {
   }
 
   static final router = GoRouter(
+    debugLogDiagnostics: true,
     routes: [
       GoRoute(
         path: '/',
@@ -46,12 +49,28 @@ class AppRouter {
         builder: (context, state) => const HomeScreen(),
         routes: [
           GoRoute(
-            path: ':vehicleId',
+            path: 'details/:vehicleId',
             name: RouteName.details.name,
             builder: (context, state) => VehicleDetailsScreen(
               vehicleId: int.parse(state.pathParameters['vehicleId']!),
             ),
-          )
+            routes: [
+              GoRoute(
+                path: 'edit',
+                name: 'edit',
+                builder: (context, state) => CreateVehicleScreen(
+                  vehicleId: state.pathParameters['vehicleId'] != null
+                      ? int.parse(state.pathParameters['vehicleId']!)
+                      : null,
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: 'create-vehicle',
+            name: RouteName.createVehicle.name,
+            builder: (context, state) => const CreateVehicleScreen(),
+          ),
         ],
       ),
     ],

@@ -4,7 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import '../../../../app_controller.dart';
+import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
+import '../../../../shared/domain/entities/roles.dart';
+import '../../../../shared/presentation/widgets/header_screen_widget.dart';
 import '../blocs/details/vehicle_detail_bloc.dart';
 import '../blocs/details/vehicle_detail_state.dart';
 
@@ -36,13 +40,17 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   Widget build(BuildContext context) => BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
         bloc: bloc,
         builder: (context, state) => Scaffold(
-          appBar: AppBar(
-              title: Text(state is VehicleDetailsSuccess ? state.details.name : 'Car Store'),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => context.pop(),
-              )),
+          appBar: HeaderScreenWidget(
+            title: state is VehicleDetailsSuccess ? state.details.name : 'Car Store',
+            onPrimaryTap: () => context.pop(),
+            onSecondaryTap: AppController.I.user.role == Roles.admin
+                ? () {
+                    AppController.I.setNavBarIndex(1);
+                    AppController.I.logout();
+                    context.goNamed(RouteName.login.name);
+                  }
+                : null,
+          ),
           body: ResponsiveScaledBox(
             width: null,
             child: Builder(
@@ -133,6 +141,16 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
               },
             ),
           ),
+          // button to edit vehicle
+          floatingActionButton: AppController.I.user.role == Roles.admin
+              ? FloatingActionButton(
+                  onPressed: () => context.goNamed(
+                    'edit',
+                    pathParameters: {'vehicleId': widget.vehicleId.toString()},
+                  ),
+                  child: const Icon(Icons.edit),
+                )
+              : null,
         ),
       );
 }
