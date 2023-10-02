@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         floatingActionButton: AppController.I.user.role == Roles.admin
             ? FloatingActionButton(
-                onPressed: () => context.goNamed(RouteName.createVehicle.name),
+                onPressed: () => context.goNamed(RouteName.registerVehicle.name),
                 child: const Icon(Icons.add),
               )
             : null,

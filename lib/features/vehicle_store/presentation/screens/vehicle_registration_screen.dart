@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../../../../shared/presentation/toast/toast_controller.dart';
+import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
+import '../../../../shared/presentation/widgets/header_screen_widget.dart';
 
-class CreateVehicleScreen extends StatefulWidget {
+class VehicleRegistrationScreen extends StatefulWidget {
   final int? vehicleId;
-  const CreateVehicleScreen({super.key, this.vehicleId});
+  const VehicleRegistrationScreen({super.key, this.vehicleId});
 
   @override
-  State<CreateVehicleScreen> createState() => _CreateVehicleScreenState();
+  State<VehicleRegistrationScreen> createState() => _VehicleRegistrationScreenState();
 }
 
-class _CreateVehicleScreenState extends State<CreateVehicleScreen> {
+class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
   @override
   void initState() {
     if (widget.vehicleId != null) {
@@ -23,8 +25,8 @@ class _CreateVehicleScreenState extends State<CreateVehicleScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Create Vehicle'),
+        appBar: HeaderScreenWidget(
+          title: widget.vehicleId != null ? 'Editar Veículo' : 'Cadastrar Veículo',
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -58,9 +60,9 @@ class _CreateVehicleScreenState extends State<CreateVehicleScreen> {
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              ElevatedButtonWidget(
                 onPressed: () {},
-                child: const Text('Create Vehicle'),
+                child: const Text('Salvar'),
               ),
             ],
           ),

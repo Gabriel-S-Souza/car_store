@@ -88,7 +88,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                       const Align(
                         alignment: Alignment.center,
                         child: Text(
-                          'Informações adicionais',
+                          'Informações',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -111,21 +111,20 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                             ),
                           ],
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: state.details.additionalInformations
-                              .asMap()
-                              .entries
-                              .map(
-                                (MapEntry<int, Map<String, String>> entry) => _InformationRowWidget(
-                                  ikey: entry.value['key'] ?? 'not found',
-                                  value: entry.value['value'] ?? 'not found',
-                                  rowColor: entry.key.isEven
-                                      ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
-                                      : Theme.of(context).cardColor,
-                                ),
-                              )
-                              .toList(),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.tableInformations.length,
+                          itemBuilder: (context, index) {
+                            final entry = state.tableInformations[index];
+                            return _InformationRowWidget(
+                              ikey: entry['key'] ?? 'not found',
+                              value: entry['value'] ?? 'not found',
+                              rowColor: index.isEven
+                                  ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
+                                  : Theme.of(context).cardColor,
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 28),
@@ -141,7 +140,6 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
               },
             ),
           ),
-          // button to edit vehicle
           floatingActionButton: AppController.I.user.role == Roles.admin
               ? FloatingActionButton(
                   onPressed: () => context.goNamed(

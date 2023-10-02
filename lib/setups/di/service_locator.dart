@@ -12,13 +12,18 @@ import '../../features/auth/presentation/blocs/login/login_bloc.dart';
 import '../../features/auth/presentation/blocs/register/register_user_bloc.dart';
 import '../../features/vehicle_store/data/data_sources/cache/vehicle_caching_data_source_imp.dart';
 import '../../features/vehicle_store/data/data_sources/remoto/vehicle_data_source.dart';
-import '../../features/vehicle_store/data/data_sources/remoto/vehicle_data_source_imp.dart';
-import '../../features/vehicle_store/data/repositories/vehicle_repository_imp.dart';
-import '../../features/vehicle_store/domain/repositories/vehicle_repository.dart';
+import '../../features/vehicle_store/data/data_sources/remoto/vehicle_reader_data_source_imp.dart';
+import '../../features/vehicle_store/data/data_sources/remoto/vehicle_writer_data_source_imp.dart';
+import '../../features/vehicle_store/data/repositories/vehicle_reader_repository_imp.dart';
+import '../../features/vehicle_store/domain/repositories/vehicle_reader_repository.dart';
+import '../../features/vehicle_store/domain/use_cases/delete_vehicle_use_case.dart';
 import '../../features/vehicle_store/domain/use_cases/get_vehicle_details_use_case.dart';
 import '../../features/vehicle_store/domain/use_cases/get_vehicle_use_case.dart';
+import '../../features/vehicle_store/domain/use_cases/register_vehicle_use_case.dart';
+import '../../features/vehicle_store/domain/use_cases/update_vehicle_use_case.dart';
 import '../../features/vehicle_store/presentation/blocs/details/vehicle_detail_bloc.dart';
 import '../../features/vehicle_store/presentation/blocs/home/home_bloc.dart';
+import '../../features/vehicle_store/presentation/blocs/registration/vehicle_registration_bloc.dart';
 import '../../shared/data/data_sources/local_storage/local_storage_data_source.dart';
 import '../../shared/data/data_sources/local_storage/local_storage_imp.dart';
 import '../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
@@ -53,13 +58,19 @@ class ServiceLocator {
     registerSingleton<HttpClient>(HttpClient(dioApp));
 
     // Data sources
-    registerFactory<VehicleDataSource>(
+    registerFactory<VehicleReaderDataSource>(
       () => VehicleCachingDataSourceImp(
         localStorage: get(),
-        vehicleRemoteDataSource: VehicleDataSourceImp(
+        vehicleRemoteDataSource: VehicleReaderDataSourceImp(
           httpClient: get(),
-          secureLocalStorage: get(),
         ),
+      ),
+    );
+
+    registerFactory<VehicleWriterDataSource>(
+      () => VehicleWriterDataSourceImp(
+        httpClient: get(),
+        secureLocalStorage: get(),
       ),
     );
 
@@ -71,8 +82,8 @@ class ServiceLocator {
     );
 
     // Repositories
-    registerFactory<VehicleRepository>(
-      () => VehicleRepositoryImp(
+    registerFactory<VehicleReaderRepository>(
+      () => VehicleReaderRepositoryImp(
         vehicleDataSource: get(),
       ),
     );
@@ -84,18 +95,6 @@ class ServiceLocator {
     );
 
     // Use cases
-    registerFactory<GetVehiclesUseCase>(
-      () => GetVehiclesUseCaseImp(
-        vehicleRepository: get(),
-      ),
-    );
-
-    registerFactory<GetVehicleDetailsUseCase>(
-      () => GetVehicleDetailsUseCaseImp(
-        vehicleRepository: get(),
-      ),
-    );
-
     registerFactory<LoginUseCase>(
       () => LoginUseCaseImp(
         authRepository: get(),
@@ -108,19 +107,37 @@ class ServiceLocator {
       ),
     );
 
+    registerFactory<GetVehiclesUseCase>(
+      () => GetVehiclesUseCaseImp(
+        vehicleRepository: get(),
+      ),
+    );
+
+    registerFactory<GetVehicleDetailsUseCase>(
+      () => GetVehicleDetailsUseCaseImp(
+        vehicleRepository: get(),
+      ),
+    );
+
+    registerFactory<RegisterVehicleUseCase>(
+      () => RegisterVehicleUseCaseImp(
+        vehicleRepository: get(),
+      ),
+    );
+
+    registerFactory<UpdateVehicleUseCase>(
+      () => UpdateVehicleUseCaseImp(
+        vehicleRepository: get(),
+      ),
+    );
+
+    registerFactory<DeleteVehicleUseCase>(
+      () => DeleteVehicleUseCaseImp(
+        vehicleRepository: get(),
+      ),
+    );
+
     // Blocs
-    registerFactory<HomeBloc>(
-      () => HomeBloc(
-        getVehicles: get(),
-      ),
-    );
-
-    registerFactory<VehicleDetailsBloc>(
-      () => VehicleDetailsBloc(
-        getVehicleDetails: get(),
-      ),
-    );
-
     registerFactory<LoginBloc>(
       () => LoginBloc(
         login: get(),
@@ -130,6 +147,27 @@ class ServiceLocator {
     registerFactory<RegisterUserBloc>(
       () => RegisterUserBloc(
         registerUser: get(),
+      ),
+    );
+
+    registerFactory<HomeBloc>(
+      () => HomeBloc(
+        getVehicles: get(),
+      ),
+    );
+
+    registerFactory<VehicleDetailsBloc>(
+      () => VehicleDetailsBloc(
+        getVehicleDetails: get(),
+        deleteVehicle: get(),
+      ),
+    );
+
+    registerFactory<VehicleRegistrationBloc>(
+      () => VehicleRegistrationBloc(
+        registerVehicle: get(),
+        updateVehicle: get(),
+        getVehicleDetails: get(),
       ),
     );
   }

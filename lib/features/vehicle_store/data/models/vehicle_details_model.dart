@@ -9,17 +9,40 @@ class VehicleDetailsModel extends VehicleDetailsEntity {
     required super.name,
     required super.brand,
     required super.model,
+    required super.year,
+    required super.mileage,
+    required super.condition,
     required super.image,
     required super.price,
     required super.description,
     required super.additionalInformations,
   });
 
+  factory VehicleDetailsModel.fromEntity(VehicleDetailsEntity entity) => VehicleDetailsModel(
+        id: entity.id,
+        name: entity.name,
+        brand: entity.brand,
+        model: entity.model,
+        year: entity.year,
+        mileage: entity.mileage,
+        condition: entity.condition,
+        image: entity.image,
+        price: entity.price,
+        description: entity.description,
+        additionalInformations: entity.additionalInformations,
+      );
+
   factory VehicleDetailsModel.fromJson(Map<String, dynamic> json) => VehicleDetailsModel(
         id: json['id'] as int,
         name: json['name'] as String,
         brand: json['brand'] as String,
         model: json['model'] as String,
+        year: json['year'] as int,
+        mileage: json['mileage'] as int,
+        condition: Condition.values.firstWhere(
+          (e) => e.label == json['condition'] as String,
+          orElse: () => Condition.used,
+        ),
         image: _decodeImage((json['image'] as String).codeUnits),
         price: json['price'] is int ? (json['price'] as int).toDouble() : json['price'] as double,
         description: json['description'] as String,

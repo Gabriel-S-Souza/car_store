@@ -7,10 +7,10 @@ abstract class GetVehiclesUseCase {
 }
 
 class GetVehiclesUseCaseImp implements GetVehiclesUseCase {
-  final VehicleRepository _vehicleRepository;
+  final VehicleReaderRepository _vehicleRepository;
 
   const GetVehiclesUseCaseImp({
-    required VehicleRepository vehicleRepository,
+    required VehicleReaderRepository vehicleRepository,
   }) : _vehicleRepository = vehicleRepository;
 
   @override
