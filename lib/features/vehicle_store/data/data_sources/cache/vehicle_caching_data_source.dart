@@ -1,7 +1,7 @@
 import '../../../../../shared/domain/entities/result.dart';
 import '../../models/vehicle_details_model.dart';
 import '../../models/vehicle_model.dart';
-import '../remoto/vehicle_reader_data_source.dart';
+import '../remoto/vehicle_data_source.dart';
 
 abstract class VehicleCachingDataSource implements VehicleReaderDataSource {
   final VehicleReaderDataSource _vehicleRemoteDataSource;

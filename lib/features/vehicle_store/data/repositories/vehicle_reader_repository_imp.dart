@@ -1,8 +1,8 @@
 import '../../../../shared/domain/entities/result.dart';
 import '../../domain/entities/vehicle_details_entity.dart';
 import '../../domain/entities/vehicle_entity.dart';
-import '../../domain/repositories/vehicle_repository.dart';
-import '../data_sources/remoto/vehicle_reader_data_source.dart';
+import '../../domain/repositories/vehicle_reader_repository.dart';
+import '../data_sources/remoto/vehicle_data_source.dart';
 
 class VehicleReaderRepositoryImp implements VehicleReaderRepository {
   final VehicleReaderDataSource _vehicleDataSource;

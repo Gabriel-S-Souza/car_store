@@ -1,6 +1,6 @@
 import '../../../../shared/domain/entities/result.dart';
 import '../entities/vehicle_entity.dart';
-import '../repositories/vehicle_repository.dart';
+import '../repositories/vehicle_reader_repository.dart';
 
 abstract class GetVehiclesUseCase {
   Future<Result<List<VehicleEntity>>> call(int page);
