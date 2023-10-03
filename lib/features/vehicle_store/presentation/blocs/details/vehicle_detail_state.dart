@@ -27,7 +27,7 @@ class VehicleDetailsSuccess extends VehicleDetailsState {
     tableInformations.add({'Ano': details.year.toString()});
     tableInformations.add({'Condição': details.condition.labelToDisplay});
     if (details.mileage != null) {
-      tableInformations.add({'Kilometragem': details.mileage!.toString()});
+      tableInformations.add({'Quilometragem': details.mileage!.toString()});
     }
     if (details.engine != null && details.engine!.isNotEmpty) {
       tableInformations.add({'Motor': details.engine!});

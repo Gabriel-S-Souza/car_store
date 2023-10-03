@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../setups/di/service_locator.dart';
 import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
@@ -13,6 +16,7 @@ import '../blocs/registration/vehicle_registration_bloc.dart';
 import '../blocs/registration/vehicle_registration_state.dart';
 import '../dtos/vehicle_editing_dto.dart';
 import '../widgets/drop_selector_widget.dart';
+import '../widgets/image_field_widget.dart';
 
 class VehicleRegistrationScreen extends StatefulWidget {
   final int? vehicleId;
@@ -54,12 +58,10 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
   void initState() {
     super.initState();
     isUpdate = widget.vehicleId != null;
-
-    vehicleEditingDto.addListener(() {
-      print('vehicleEditingDto: ${vehicleEditingDto.value.toJson()}');
-    });
+    vehicleEditingDto.value = vehicleEditingDto.value.copyWith(id: widget.vehicleId ?? -1);
   }
 
+  // TODO: Remover mock
   final mockVehicle = VehicleEditingDto(
     id: -1,
     name: 'Carro de Teste',
@@ -77,20 +79,26 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
   @override
   Widget build(BuildContext context) => GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          appBar: HeaderScreenWidget(
-            title: widget.vehicleId != null ? 'Editar Veículo' : 'Cadastrar Veículo',
-            onPrimaryTap: () => context.pop(),
-          ),
-          body: BlocProvider<VehicleRegistrationBloc>(
-            create: (context) => bloc,
-            child: BlocBuilder<VehicleRegistrationBloc, VehicleRegistrationState>(
-              bloc: bloc,
-              builder: (context, state) => Form(
+        child: BlocProvider<VehicleRegistrationBloc>(
+          create: (context) => bloc,
+          child: BlocBuilder<VehicleRegistrationBloc, VehicleRegistrationState>(
+            bloc: bloc,
+            builder: (context, state) => Scaffold(
+              appBar: HeaderScreenWidget(
+                title: widget.vehicleId != null ? 'Editar Veículo' : 'Cadastrar Veículo',
+                onPrimaryTap: () => context.pop(),
+              ),
+              body: Form(
                 key: _formKey,
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
                   children: [
+                    const SizedBox(height: 16),
+                    ImageFieldWidget(
+                      onImageSelected: (image) =>
+                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(image: image),
+                    ),
+                    const SizedBox(height: 28),
                     TextFieldWidget(
                       initialValue: widget.vehicle?.name,
                       controller: nameController,
@@ -179,60 +187,63 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
                       onChanged: (value) =>
                           vehicleEditingDto.value = vehicleEditingDto.value.copyWith(engine: value),
                     ),
-                    const SizedBox(height: 20),
-                    ValueListenableBuilder<VehicleEditingDto>(
-                        valueListenable: vehicleEditingDto,
-                        builder: (context, vehicleEditing, child) => ElevatedButtonWidget(
-                              enabled: vehicleEditingDto.value.isValid,
-                              onPressed: () async {
-                                if (vehicleEditingDto.value.isValid) {
-                                  await bloc.writeVehicle(
-                                      vehicleEditingDto.value.toEntity(), isUpdate);
-                                  if (bloc.state is VehicleRegistrationSuccess) {
-                                    Future.delayed(
-                                      const Duration(seconds: 1),
-                                      () {
-                                        context.pop();
-                                      },
-                                    );
-                                  }
-                                }
-                              },
-                              child: state is VehicleRegistrationLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : Text(
-                                      isUpdate ? 'Atualizar' : 'Cadastrar',
-                                    ),
-                            )),
-                    const SizedBox(height: 16),
-                    OutlinedButtonWidget(
-                      onPressed: () async {
-                        final entity = mockVehicle.toEntity();
-                        nameController.text = entity.name;
-                        brandController.text = entity.brand;
-                        modelController.text = entity.model;
-                        priceController.text = entity.price.toString();
-                        descriptionController.text = entity.description;
-                        yearController.text = entity.year.toString();
-                        mileageController.text = entity.mileage.toString();
-                        engineController.text = entity.engine ?? '';
-                        vehicleEditingDto.value = mockVehicle;
-                        vehicleEditingDto.value = mockVehicle.copyWith(
-                          condition: Condition.needsRepair,
-                        );
-                      },
-                      child: const Text('Mock'),
-                    ),
                     const SizedBox(height: 28),
                   ],
                 ),
               ),
+              persistentFooterButtons: [
+                FractionallySizedBox(
+                  widthFactor: 1,
+                  child: ValueListenableBuilder<VehicleEditingDto>(
+                      valueListenable: vehicleEditingDto,
+                      builder: (context, vehicleEditing, child) => ElevatedButtonWidget(
+                            enabled: vehicleEditingDto.value.isValid,
+                            onPressed: () async {
+                              if (vehicleEditingDto.value.isValid) {
+                                await bloc.writeVehicle(
+                                    vehicleEditingDto.value.toEntity(), isUpdate);
+                                if (bloc.state is VehicleRegistrationSuccess) {
+                                  Future.delayed(
+                                    const Duration(seconds: 1),
+                                    () {
+                                      context.pop();
+                                    },
+                                  );
+                                }
+                              }
+                            },
+                            child: state is VehicleRegistrationLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    isUpdate ? 'Atualizar' : 'Cadastrar',
+                                  ),
+                          )),
+                ),
+                // const SizedBox(height: 16),
+                // OutlinedButtonWidget(
+                //   onPressed: () async {
+                //     final entity = mockVehicle.toEntity();
+                //     nameController.text = entity.name;
+                //     brandController.text = entity.brand;
+                //     modelController.text = entity.model;
+                //     priceController.text = entity.price.toString();
+                //     descriptionController.text = entity.description;
+                //     yearController.text = entity.year.toString();
+                //     mileageController.text = entity.mileage.toString();
+                //     engineController.text = entity.engine ?? '';
+                //     vehicleEditingDto.value = mockVehicle;
+                //     vehicleEditingDto.value = mockVehicle.copyWith(
+                //       condition: Condition.needsRepair,
+                //     );
+                //   },
+                //   child: const Text('Mock'),
+              ],
             ),
           ),
         ),

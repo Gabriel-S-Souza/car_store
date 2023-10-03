@@ -244,6 +244,7 @@ class _InformationRowWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
+              flex: 3,
               child: Text(
                 ikey,
                 style: const TextStyle(
@@ -254,7 +255,7 @@ class _InformationRowWidget extends StatelessWidget {
             ),
             const SizedBox(width: 20),
             Flexible(
-              flex: 3,
+              flex: 2,
               child: AutoSizeText(
                 value,
                 maxFontSize: 14,
