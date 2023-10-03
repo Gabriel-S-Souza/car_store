@@ -10,6 +10,8 @@ import '../../../../shared/domain/entities/roles.dart';
 import '../../../../shared/presentation/widgets/header_screen_widget.dart';
 import '../blocs/home/home_bloc.dart';
 import '../blocs/home/home_state.dart';
+import '../blocs/registration/vehicle_registration_bloc.dart';
+import '../blocs/registration/vehicle_registration_state.dart';
 import '../widgets/grid_vehicles_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,14 +23,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final bloc = ServiceLocator.I.get<HomeBloc>();
+  final registrationBloc = ServiceLocator.I.get<VehicleRegistrationBloc>();
 
   @override
   void initState() {
     super.initState();
     bloc.getVehicles(1);
-    // AppRouter.router.routerDelegate.addListener(() {
-    //   log(AppRouter.router.routerDelegate.currentConfiguration.uri.toString());
-    // });
   }
 
   @override
@@ -51,32 +51,52 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0).copyWith(top: 0),
-          child: BlocBuilder<HomeBloc, HomeState>(
-            bloc: bloc,
-            builder: (context, state) => LazyLoadScrollView(
-              isLoading: state.isLoading,
-              onEndOfPage: () {
-                if (!state.isLoading &&
-                    state.errorMessage?.contains('Não há mais veículos') != true) {
-                  bloc.nextPage();
-                }
-              },
-              child: GridVehiclesWidget(
+          child: BlocListener<VehicleRegistrationBloc, VehicleRegistrationState>(
+            bloc: registrationBloc,
+            listener: (context, state) {
+              if (state is VehicleRegistrationSuccess) {
+                bloc.clearList();
+                bloc.getVehicles(1);
+              }
+            },
+            child: BlocBuilder<HomeBloc, HomeState>(
+              bloc: bloc,
+              builder: (context, state) => LazyLoadScrollView(
                 isLoading: state.isLoading,
-                vehicles: state.vehicles,
-                onVehicleTap: (vehicle) {
-                  context.goNamed(
-                    RouteName.details.name,
-                    pathParameters: {'vehicleId': vehicle.id.toString()},
-                  );
+                onEndOfPage: () {
+                  if (!state.isLoading &&
+                      state.errorMessage?.contains('Não há mais veículos') != true) {
+                    bloc.nextPage();
+                  }
                 },
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    bloc.clearList();
+                    bloc.getVehicles(1);
+                  },
+                  edgeOffset: 20,
+                  child: GridVehiclesWidget(
+                    isLoading: state.isLoading,
+                    vehicles: state.vehicles,
+                    onVehicleTap: (vehicle) {
+                      bloc.clearError();
+                      context.goNamed(
+                        RouteName.details.name,
+                        pathParameters: {'vehicleId': vehicle.id.toString()},
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
           ),
         ),
         floatingActionButton: AppController.I.user.role == Roles.admin
             ? FloatingActionButton(
-                onPressed: () => context.goNamed(RouteName.registerVehicle.name),
+                onPressed: () {
+                  bloc.clearError();
+                  context.goNamed(RouteName.registerVehicle.name) as bool?;
+                },
                 child: const Icon(Icons.add),
               )
             : null,

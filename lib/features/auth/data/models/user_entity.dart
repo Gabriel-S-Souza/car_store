@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../../../../shared/domain/entities/roles.dart';
 import '../../domain/entities/user_entity.dart';
 
@@ -14,10 +12,7 @@ class UserModel extends UserEntity {
         name: json['name'] as String,
         email: json['email'] as String,
         role: Roles.values.firstWhere(
-          (e) {
-            log(e.label);
-            return e.label == json['role'];
-          },
+          (e) => e.label == json['role'],
           orElse: () => Roles.visitor,
         ),
       );

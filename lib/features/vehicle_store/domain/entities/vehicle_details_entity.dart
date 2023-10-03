@@ -6,12 +6,12 @@ class VehicleDetailsEntity {
   final String brand;
   final String model;
   final int year;
-  final int mileage;
   final Condition condition;
   final Uint8List image;
   final double price;
   final String description;
-  final List<Map<String, String>> additionalInformations;
+  final String? engine;
+  final int? mileage;
 
   const VehicleDetailsEntity({
     required this.id,
@@ -19,19 +19,19 @@ class VehicleDetailsEntity {
     required this.brand,
     required this.model,
     required this.year,
-    required this.mileage,
     required this.condition,
     required this.image,
     required this.price,
     required this.description,
-    required this.additionalInformations,
+    this.engine,
+    this.mileage,
   });
 }
 
 enum Condition {
   newVehicle('new', 'Novo'),
-  used('used', 'Usado'),
   almostNew('almost_new', 'Semi novo'),
+  used('used', 'Usado'),
   inGoodCondition('in_good_condition', 'Em bom estado'),
   needsRepair('needs_repair', 'Precisa de reparos');
 
@@ -39,4 +39,9 @@ enum Condition {
   final String labelToDisplay;
 
   const Condition(this.label, this.labelToDisplay);
+
+  static Condition fromLabel(String label) => Condition.values.firstWhere(
+        (e) => e.label == label,
+        orElse: () => Condition.used,
+      );
 }

@@ -23,21 +23,15 @@ class VehicleDetailsSuccess extends VehicleDetailsState {
   VehicleDetailsSuccess deleted() => copyWith(isDeleted: true);
 
   List<Map<String, String>> get tableInformations {
-    final tableInformations = [
-      {
-        'key': 'Ano',
-        'value': details.year.toString(),
-      },
-      {
-        'key': 'Km',
-        'value': details.mileage.toString(),
-      },
-      {
-        'key': 'Condição',
-        'value': details.condition.labelToDisplay,
-      },
-      ...details.additionalInformations,
-    ];
+    final tableInformations = <Map<String, String>>[];
+    tableInformations.add({'Ano': details.year.toString()});
+    tableInformations.add({'Condição': details.condition.labelToDisplay});
+    if (details.mileage != null) {
+      tableInformations.add({'Kilometragem': details.mileage!.toString()});
+    }
+    if (details.engine != null && details.engine!.isNotEmpty) {
+      tableInformations.add({'Motor': details.engine!});
+    }
     return tableInformations;
   }
 

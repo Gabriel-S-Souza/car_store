@@ -32,7 +32,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
               Flexible(
                 fit: FlexFit.loose,
                 child: Align(
-                  alignment: const Alignment(-1, 0.35),
+                  alignment: const Alignment(-1, 0.40),
                   child: Visibility(
                     visible: onPrimaryTap != null,
                     child: IconButton(
@@ -52,8 +52,9 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
                 ),
               ),
             Expanded(
+              flex: 3,
               child: Align(
-                alignment: centerTitle ? const Alignment(0, 0.22) : const Alignment(-1, 0.22),
+                alignment: centerTitle ? const Alignment(0, 0.35) : const Alignment(-1, 0.22),
                 child: AutoSizeText(
                   title,
                   maxFontSize: fontSize,
@@ -70,7 +71,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
               Flexible(
                 fit: FlexFit.loose,
                 child: Align(
-                  alignment: const Alignment(1, 0.35),
+                  alignment: const Alignment(1, 0.38),
                   child: Visibility(
                     visible: onSecondaryTap != null,
                     child: IconButton(

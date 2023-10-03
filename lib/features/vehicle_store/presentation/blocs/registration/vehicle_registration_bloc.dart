@@ -28,7 +28,10 @@ class VehicleRegistrationBloc extends Cubit<VehicleRegistrationState> {
 
     result.when(
       onSuccess: (res) {
-        Toast.show('Veículo registrado com sucesso!', backgroundColor: Colors.green);
+        Toast.show(
+          isUpdate ? 'Veículo atualizado com sucesso' : 'Veículo cadastrado com sucesso',
+          backgroundColor: Colors.green,
+        );
         emit(VehicleRegistrationSuccess());
       },
       onFailure: (error, _) {

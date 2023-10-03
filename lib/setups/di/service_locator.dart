@@ -15,7 +15,9 @@ import '../../features/vehicle_store/data/data_sources/remoto/vehicle_data_sourc
 import '../../features/vehicle_store/data/data_sources/remoto/vehicle_reader_data_source_imp.dart';
 import '../../features/vehicle_store/data/data_sources/remoto/vehicle_writer_data_source_imp.dart';
 import '../../features/vehicle_store/data/repositories/vehicle_reader_repository_imp.dart';
+import '../../features/vehicle_store/data/repositories/vehicle_writer_repository_imp.dart';
 import '../../features/vehicle_store/domain/repositories/vehicle_reader_repository.dart';
+import '../../features/vehicle_store/domain/repositories/vehicle_writer_repositoty.dart';
 import '../../features/vehicle_store/domain/use_cases/delete_vehicle_use_case.dart';
 import '../../features/vehicle_store/domain/use_cases/get_vehicle_details_use_case.dart';
 import '../../features/vehicle_store/domain/use_cases/get_vehicle_use_case.dart';
@@ -82,15 +84,21 @@ class ServiceLocator {
     );
 
     // Repositories
+    registerFactory<AuthRepository>(
+      () => AuthRepositoryImp(
+        authDataSource: get(),
+      ),
+    );
+
     registerFactory<VehicleReaderRepository>(
       () => VehicleReaderRepositoryImp(
         vehicleDataSource: get(),
       ),
     );
 
-    registerFactory<AuthRepository>(
-      () => AuthRepositoryImp(
-        authDataSource: get(),
+    registerFactory<VehicleWriterRepository>(
+      () => VehicleWriterRepositoryImp(
+        vehicleDataSource: get(),
       ),
     );
 
@@ -163,8 +171,8 @@ class ServiceLocator {
       ),
     );
 
-    registerFactory<VehicleRegistrationBloc>(
-      () => VehicleRegistrationBloc(
+    registerSingleton<VehicleRegistrationBloc>(
+      VehicleRegistrationBloc(
         registerVehicle: get(),
         updateVehicle: get(),
         getVehicleDetails: get(),

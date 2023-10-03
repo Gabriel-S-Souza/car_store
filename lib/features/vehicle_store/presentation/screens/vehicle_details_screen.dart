@@ -118,8 +118,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                           itemBuilder: (context, index) {
                             final entry = state.tableInformations[index];
                             return _InformationRowWidget(
-                              ikey: entry['key'] ?? 'not found',
-                              value: entry['value'] ?? 'not found',
+                              ikey: entry.keys.first,
+                              value: entry.values.first,
                               rowColor: index.isEven
                                   ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
                                   : Theme.of(context).cardColor,
@@ -145,6 +145,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                   onPressed: () => context.goNamed(
                     'edit',
                     pathParameters: {'vehicleId': widget.vehicleId.toString()},
+                    extra: (state as VehicleDetailsSuccess).details,
                   ),
                   child: const Icon(Icons.edit),
                 )

@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
+import '../../features/vehicle_store/domain/entities/vehicle_details_entity.dart';
 import '../../features/vehicle_store/presentation/screens/home_screen.dart';
 import '../../features/vehicle_store/presentation/screens/vehicle_details_screen.dart';
 import '../../features/vehicle_store/presentation/screens/vehicle_registration_screen.dart';
@@ -59,9 +60,8 @@ class AppRouter {
                 path: 'edit',
                 name: 'edit',
                 builder: (context, state) => VehicleRegistrationScreen(
-                  vehicleId: state.pathParameters['vehicleId'] != null
-                      ? int.parse(state.pathParameters['vehicleId']!)
-                      : null,
+                  vehicleId: int.tryParse(state.pathParameters['vehicleId'] ?? ''),
+                  vehicle: state.extra as VehicleDetailsEntity?,
                 ),
               ),
             ],
