@@ -3,9 +3,8 @@ import 'package:dio/dio.dart';
 import '../../features/auth/data/interceptors/check_token.dart';
 import 'interceptors/log_interceptor_app.dart';
 
-//TODO: Sets real url
-const _baseUrl = 'http://192.168.1.3:3000';
-// const _baseUrl = 'http://localhost:3000';
+const _baseUrl = String.fromEnvironment('API_URL');
+
 const _basePath = '/api';
 
 final dioApp = Dio(
