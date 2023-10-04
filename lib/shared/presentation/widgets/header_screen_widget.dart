@@ -32,7 +32,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
               Flexible(
                 fit: FlexFit.loose,
                 child: Align(
-                  alignment: const Alignment(-2, 0.5),
+                  alignment: const Alignment(-1.2, 0.5),
                   child: Visibility(
                     visible: onPrimaryTap != null,
                     child: IconButton(
@@ -71,7 +71,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
               Flexible(
                 fit: FlexFit.loose,
                 child: Align(
-                  alignment: const Alignment(2.3, 0.5),
+                  alignment: const Alignment(1.2, 0.5),
                   child: Visibility(
                     visible: onSecondaryTap != null,
                     child: IconButton(
