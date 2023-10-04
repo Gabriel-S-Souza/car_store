@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import 'interceptors/check_token.dart';
+import '../../features/auth/data/interceptors/check_token.dart';
 import 'interceptors/log_interceptor_app.dart';
 
 //TODO: Sets real url

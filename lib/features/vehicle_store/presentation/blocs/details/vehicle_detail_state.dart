@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../../setups/utils/formatter.dart';
 import '../../../domain/entities/vehicle_details_entity.dart';
 
 class VehicleDetailsState extends Equatable {
@@ -26,7 +27,8 @@ class VehicleDetailsSuccess extends VehicleDetailsState {
     tableInformations.add({'Ano': details.year.toString()});
     tableInformations.add({'Condição': details.condition.labelToDisplay});
     if (details.mileage != null) {
-      tableInformations.add({'Quilometragem': details.mileage!.toString()});
+      tableInformations.add(
+          {'Quilometragem': details.mileage != null ? Formatter.mileage(details.mileage!) : ''});
     }
     if (details.engine != null && details.engine!.isNotEmpty) {
       tableInformations.add({'Motor': details.engine!});

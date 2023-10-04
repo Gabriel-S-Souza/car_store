@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../setups/utils/formatter.dart';
 import '../../domain/entities/vehicle_entity.dart';
 
 class VehicleCardWidget extends StatelessWidget {
@@ -88,7 +89,7 @@ class VehicleCardWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       AutoSizeText(
-                        'R\$ ${(vehicle.price).toStringAsFixed(2)}',
+                        Formatter.doubleToCurrency(vehicle.price),
                         maxLines: 2,
                         maxFontSize: 10,
                         minFontSize: 6,

@@ -7,6 +7,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import '../../../../app_controller.dart';
 import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
+import '../../../../setups/utils/formatter.dart';
 import '../../../../shared/domain/entities/roles.dart';
 import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
 import '../../../../shared/presentation/widgets/header_screen_widget.dart';
@@ -81,17 +82,12 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                           children: [
                             FractionallySizedBox(
                               widthFactor: 1,
-                              child: InteractiveViewer(
-                                boundaryMargin: const EdgeInsets.all(20.0),
-                                minScale: 1,
-                                maxScale: 2,
-                                child: AspectRatio(
-                                  aspectRatio: 1.4,
-                                  child: Image.memory(
-                                    state.details.image,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  ),
+                              child: AspectRatio(
+                                aspectRatio: 1.4,
+                                child: Image.memory(
+                                  state.details.image,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
                                 ),
                               ),
                             ),
@@ -318,7 +314,7 @@ class _PriceWidget extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: 'R\$ ${price.toStringAsFixed(2)}',
+                text: Formatter.doubleToCurrency(price),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,

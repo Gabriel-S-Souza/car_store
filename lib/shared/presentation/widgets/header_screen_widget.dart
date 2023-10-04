@@ -23,7 +23,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

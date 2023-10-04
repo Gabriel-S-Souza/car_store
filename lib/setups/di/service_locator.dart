@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../app_controller.dart';
 import '../../features/auth/data/datasources/auth_datasource.dart';
 import '../../features/auth/data/datasources/auth_datasource_imp.dart';
 import '../../features/auth/data/datasources/refresh_token_data_source.dart';
@@ -187,6 +188,8 @@ class ServiceLocator {
         deleteVehicle: get(),
       ),
     );
+
+    AppController.I.init(get());
   }
 
   T get<T extends Object>() => _getIt.get<T>();

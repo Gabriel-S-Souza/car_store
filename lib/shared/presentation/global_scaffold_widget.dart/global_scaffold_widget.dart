@@ -29,7 +29,7 @@ class GlobalScaffoldWidget extends StatelessWidget {
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.person),
-                      label: 'Admin',
+                      label: 'Login',
                     ),
                   ],
                 ),
