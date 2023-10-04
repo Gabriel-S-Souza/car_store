@@ -22,7 +22,7 @@ mixin HttpErrorHandler {
     final statusCode = e.response!.statusCode;
     final String? message;
 
-    if (e.response!.data is Map && e.response!.data.containsKey('message')) {
+    if (e.response?.data is Map && e.response!.data.containsKey('message')) {
       message = e.response!.data['message'] is String
           ? e.response!.data['message']
           : e.response!.statusMessage;
@@ -51,7 +51,7 @@ mixin HttpErrorHandler {
   Failure _handleErrorByType(DioException e) {
     final String? message;
 
-    if (e.response!.data is Map && e.response!.data.containsKey('message')) {
+    if (e.response?.data is Map && e.response!.data.containsKey('message')) {
       message = e.response!.data['message'] is String
           ? e.response!.data['message']
           : e.response!.statusMessage;

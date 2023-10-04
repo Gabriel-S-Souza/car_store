@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/auth/data/datasources/auth_datasource.dart';
 import '../../features/auth/data/datasources/auth_datasource_imp.dart';
+import '../../features/auth/data/datasources/refresh_token_data_source.dart';
+import '../../features/auth/data/datasources/refresh_token_data_source_imp.dart';
 import '../../features/auth/data/repositories/auth_repository_imp.dart';
 import '../../features/auth/domain/repositories/login_repository.dart';
 import '../../features/auth/domain/use_cases/login_use_case.dart';
@@ -60,6 +62,13 @@ class ServiceLocator {
     registerSingleton<HttpClient>(HttpClient(dioApp));
 
     // Data sources
+    registerFactory<AuthDataSource>(
+      () => AuthDataSourceImp(
+        httpClient: get(),
+        secureLocalStorage: get(),
+      ),
+    );
+
     registerFactory<VehicleReaderDataSource>(
       () => VehicleCachingDataSourceImp(
         localStorage: get(),
@@ -76,17 +85,17 @@ class ServiceLocator {
       ),
     );
 
-    registerFactory<AuthDataSource>(
-      () => AuthDataSourceImp(
-        httpClient: get(),
-        secureLocalStorage: get(),
-      ),
-    );
-
     // Repositories
     registerFactory<AuthRepository>(
       () => AuthRepositoryImp(
         authDataSource: get(),
+      ),
+    );
+
+    registerFactory<RefreshTokenDataSource>(
+      () => RefreshTokenDataSourceImp(
+        httpClient: get(),
+        secureLocalStorage: get(),
       ),
     );
 

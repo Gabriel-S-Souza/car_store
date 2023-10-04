@@ -5,7 +5,7 @@ class Failure implements Exception {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure([String? message]) : super(message ?? 'Erro interno no servidor');
+  const ServerFailure([String? message]) : super(message ?? 'Erro na comunicação com o servidor');
 
   @override
   String toString() => 'ServerFailure($message)';
