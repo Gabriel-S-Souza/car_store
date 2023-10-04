@@ -15,15 +15,11 @@ O Car Store é um aplicativo Flutter para listar e gerenciar veículos em uma lo
 
 </br>
 <div style="display: flex; justify-content: center;">
-  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/8f53f52a-f5a1-4a2b-96e7-4e7e11167a22" height="420" />
-  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/083f43ea-f7c1-4fd4-8d4e-bef409bb50fa" height="420" />
-  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/0a7c38cd-328b-4558-ac64-cc5e6b3e4456" height="420" />
-</div>
-</br>
-<div style="display: flex; justify-content: center;">
-  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/6d720ebd-faf6-465c-bc96-8ed63306ff83" height="420" />
-  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/4bed6606-ad02-4797-922f-36d1c6e42d11" height="420" />
-  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/7bee1bd1-3a22-4f46-9c62-e0f0b46c6e8f" height="420" />
+  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/8f53f52a-f5a1-4a2b-96e7-4e7e11167a22" height="300" />
+  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/083f43ea-f7c1-4fd4-8d4e-bef409bb50fa" height="300" />
+  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/0a7c38cd-328b-4558-ac64-cc5e6b3e4456" height="300" />
+  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/4bed6606-ad02-4797-922f-36d1c6e42d11" height="300" />
+  <img src="https://github.com/Gabriel-S-Souza/car_store/assets/94877176/7bee1bd1-3a22-4f46-9c62-e0f0b46c6e8f" height="300" />
 </div>
 </br>
 
