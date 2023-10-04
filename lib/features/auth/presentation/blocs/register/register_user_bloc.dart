@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../shared/presentation/toast/toast_controller.dart';
 import '../../../domain/entities/register_user_model.dart';
-import '../../../domain/use_cases/register_use_case.dart';
+import '../../../domain/use_cases/register_user_use_case.dart';
 import 'register_use_state.dart';
 
 class RegisterUserBloc extends Cubit<RegisterUserState> {

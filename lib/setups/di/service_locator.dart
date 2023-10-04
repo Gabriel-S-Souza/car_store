@@ -10,7 +10,7 @@ import '../../features/auth/data/datasources/refresh_token_data_source_imp.dart'
 import '../../features/auth/data/repositories/auth_repository_imp.dart';
 import '../../features/auth/domain/repositories/login_repository.dart';
 import '../../features/auth/domain/use_cases/login_use_case.dart';
-import '../../features/auth/domain/use_cases/register_use_case.dart';
+import '../../features/auth/domain/use_cases/register_user_use_case.dart';
 import '../../features/auth/presentation/blocs/login/login_bloc.dart';
 import '../../features/auth/presentation/blocs/register/register_user_bloc.dart';
 import '../../features/vehicle_store/data/data_sources/cache/vehicle_caching_data_source_imp.dart';
