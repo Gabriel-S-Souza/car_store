@@ -175,7 +175,7 @@ class ServiceLocator {
       VehicleRegistrationBloc(
         registerVehicle: get(),
         updateVehicle: get(),
-        getVehicleDetails: get(),
+        deleteVehicle: get(),
       ),
     );
   }

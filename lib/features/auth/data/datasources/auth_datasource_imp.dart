@@ -7,7 +7,7 @@ import '../../../../shared/domain/entities/result.dart';
 import '../../domain/entities/user_entity.dart';
 import '../models/login_credentials_model.dart';
 import '../models/resister_user_model.dart';
-import '../models/user_entity.dart';
+import '../models/user_model.dart';
 import 'auth_datasource.dart';
 
 class AuthDataSourceImp implements AuthDataSource {

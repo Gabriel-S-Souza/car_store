@@ -8,9 +8,13 @@ import '../../../../app_controller.dart';
 import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
 import '../../../../shared/domain/entities/roles.dart';
+import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
 import '../../../../shared/presentation/widgets/header_screen_widget.dart';
+import '../../../../shared/presentation/widgets/outlined_button_widget.dart';
 import '../blocs/details/vehicle_detail_bloc.dart';
 import '../blocs/details/vehicle_detail_state.dart';
+import '../blocs/registration/vehicle_registration_bloc.dart';
+import '../blocs/registration/vehicle_registration_state.dart';
 
 class VehicleDetailsScreen extends StatefulWidget {
   final int vehicleId;
@@ -23,6 +27,7 @@ class VehicleDetailsScreen extends StatefulWidget {
 
 class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   final bloc = ServiceLocator.I.get<VehicleDetailsBloc>();
+  final registrationBloc = ServiceLocator.I.get<VehicleRegistrationBloc>();
 
   @override
   void initState() {
@@ -31,125 +36,227 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   }
 
   @override
-  void dispose() {
-    bloc.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
-        bloc: bloc,
-        builder: (context, state) => Scaffold(
-          appBar: HeaderScreenWidget(
-            title: state is VehicleDetailsSuccess ? state.details.name : 'Car Store',
-            onPrimaryTap: () => context.pop(),
-            onSecondaryTap: AppController.I.user.role == Roles.admin
-                ? () {
-                    AppController.I.setNavBarIndex(1);
-                    AppController.I.logout();
-                    context.goNamed(RouteName.login.name);
+  Widget build(BuildContext context) =>
+      BlocListener<VehicleRegistrationBloc, VehicleRegistrationState>(
+        bloc: registrationBloc,
+        listener: (context, state) {
+          if (state is VehicleRegistrationSuccess && state.isUpdateOrRegister) {
+            bloc.getDetails(widget.vehicleId);
+          } else if (state is VehicleRegistrationSuccess && state.isDelete) {
+            Future.delayed(
+              const Duration(milliseconds: 500),
+              () {
+                context.pop();
+              },
+            );
+          }
+        },
+        child: BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
+          bloc: bloc,
+          builder: (context, state) => Scaffold(
+            appBar: HeaderScreenWidget(
+              title: state is VehicleDetailsSuccess ? state.details.name : 'Car Store',
+              onPrimaryTap: () => context.pop(),
+              onSecondaryTap: AppController.I.user.role == Roles.admin
+                  ? () {
+                      AppController.I.setNavBarIndex(1);
+                      AppController.I.logout();
+                      context.goNamed(RouteName.login.name);
+                    }
+                  : null,
+            ),
+            body: ResponsiveScaledBox(
+              width: null,
+              child: Builder(
+                builder: (context) {
+                  if (state is VehicleDetailsLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-                : null,
-          ),
-          body: ResponsiveScaledBox(
-            width: null,
-            child: Builder(
-              builder: (context) {
-                if (state is VehicleDetailsLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (state is VehicleDetailsSuccess) {
-                  return ListView(
-                    children: [
-                      Column(
-                        children: [
-                          FractionallySizedBox(
-                            widthFactor: 1,
-                            child: Image.memory(
-                              state.details.image,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      BrandAndNameWidget(
-                        brand: state.details.brand,
-                        name: state.details.name,
-                      ),
-                      const SizedBox(height: 10),
-                      _DescriptionWidget(description: state.details.description),
-                      const SizedBox(height: 10),
-                      _PriceWidget(price: state.details.price),
-                      const SizedBox(height: 20),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Informações',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                              blurRadius: 6.0,
-                              blurStyle: BlurStyle.outer,
-                              offset: const Offset(0, 3),
+                  if (state is VehicleDetailsSuccess) {
+                    return ListView(
+                      children: [
+                        Column(
+                          children: [
+                            FractionallySizedBox(
+                              widthFactor: 1,
+                              child: InteractiveViewer(
+                                boundaryMargin: const EdgeInsets.all(20.0),
+                                minScale: 1,
+                                maxScale: 2,
+                                child: AspectRatio(
+                                  aspectRatio: 1.4,
+                                  child: Image.memory(
+                                    state.details.image,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: state.tableInformations.length,
-                          itemBuilder: (context, index) {
-                            final entry = state.tableInformations[index];
-                            return _InformationRowWidget(
-                              ikey: entry.keys.first,
-                              value: entry.values.first,
-                              rowColor: index.isEven
-                                  ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
-                                  : Theme.of(context).cardColor,
-                            );
-                          },
+                        Container(
+                          margin: ResponsiveValue<EdgeInsetsGeometry>(
+                            context,
+                            conditionalValues: [
+                              Condition.largerThan(
+                                name: TABLET,
+                                value: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+                              ),
+                            ],
+                            defaultValue: const EdgeInsets.all(16),
+                          ).value,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              BrandAndNameWidget(
+                                brand: state.details.brand,
+                                name: state.details.name,
+                              ),
+                              const SizedBox(height: 10),
+                              _DescriptionWidget(description: state.details.description),
+                              const SizedBox(height: 10),
+                              _PriceWidget(price: state.details.price),
+                              const SizedBox(height: 20),
+                              const Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Informações',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 14),
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 20),
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                                      blurRadius: 6.0,
+                                      blurStyle: BlurStyle.outer,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: state.tableInformations.length,
+                                  itemBuilder: (context, index) {
+                                    final entry = state.tableInformations[index];
+                                    return _InformationRowWidget(
+                                      ikey: entry.keys.first,
+                                      value: entry.values.first,
+                                      rowColor: index.isEven
+                                          ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
+                                          : Theme.of(context).cardColor,
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              AppController.I.user.role != Roles.admin
+                                  ? FractionallySizedBox(
+                                      widthFactor: 0.5,
+                                      child: ElevatedButtonWidget(
+                                        onPressed: () => registrationBloc.buy(widget.vehicleId),
+                                        child: const Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Flexible(
+                                              child: AutoSizeText(
+                                                'Comprar',
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              if (AppController.I.user.role == Roles.admin) ...[
+                                FractionallySizedBox(
+                                  widthFactor: 0.5,
+                                  child: ElevatedButtonWidget(
+                                    onPressed: () => context.goNamed(
+                                      'edit',
+                                      pathParameters: {'vehicleId': widget.vehicleId.toString()},
+                                      extra: state.details,
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: AutoSizeText(
+                                            'Editar',
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                FractionallySizedBox(
+                                  widthFactor: 0.5,
+                                  child: BlocBuilder<VehicleRegistrationBloc,
+                                      VehicleRegistrationState>(
+                                    bloc: registrationBloc,
+                                    builder: (context, registrationState) => OutlinedButtonWidget(
+                                      onPressed: () async {
+                                        await registrationBloc.delete(widget.vehicleId);
+                                      },
+                                      borderColor: Colors.redAccent,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          registrationState is! VehicleRegistrationLoading
+                                              ? const Flexible(
+                                                  child: AutoSizeText(
+                                                    'Excluir',
+                                                    maxLines: 1,
+                                                    style: TextStyle(color: Colors.redAccent),
+                                                  ),
+                                                )
+                                              : const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child: CircularProgressIndicator(
+                                                    color: Colors.redAccent,
+                                                  ),
+                                                ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(height: 28),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 28),
-                    ],
-                  );
-                }
-                if (state is VehicleDetailsError) {
-                  return Center(
-                    child: Text(state.message),
-                  );
-                }
-                return const SizedBox();
-              },
+                      ],
+                    );
+                  }
+                  if (state is VehicleDetailsError) {
+                    return Center(
+                      child: Text(state.message),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
             ),
           ),
-          floatingActionButton: AppController.I.user.role == Roles.admin
-              ? FloatingActionButton(
-                  onPressed: () => context.goNamed(
-                    'edit',
-                    pathParameters: {'vehicleId': widget.vehicleId.toString()},
-                    extra: (state as VehicleDetailsSuccess).details,
-                  ),
-                  child: const Icon(Icons.edit),
-                )
-              : null,
         ),
       );
 }

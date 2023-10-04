@@ -68,12 +68,12 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       mask: widget.mask,
       filter: widget.filter,
       type: MaskAutoCompletionType.lazy,
-      initialText: widget.initialValue,
     );
   }
 
   @override
   Widget build(BuildContext context) => TextFormField(
+        initialValue: widget.initialValue,
         controller: widget.controller,
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,

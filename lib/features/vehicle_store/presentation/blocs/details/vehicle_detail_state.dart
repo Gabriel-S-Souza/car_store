@@ -13,14 +13,13 @@ class VehicleDetailsLoading extends VehicleDetailsState {}
 
 class VehicleDetailsSuccess extends VehicleDetailsState {
   final VehicleDetailsEntity details;
-  final bool isDeleted;
 
-  VehicleDetailsSuccess._internal(this.details, {this.isDeleted = false});
+  VehicleDetailsSuccess._internal(this.details);
 
   factory VehicleDetailsSuccess(VehicleDetailsEntity details) =>
       VehicleDetailsSuccess._internal(details);
 
-  VehicleDetailsSuccess deleted() => copyWith(isDeleted: true);
+  VehicleDetailsSuccess deleted() => copyWith();
 
   List<Map<String, String>> get tableInformations {
     final tableInformations = <Map<String, String>>[];
@@ -38,10 +37,10 @@ class VehicleDetailsSuccess extends VehicleDetailsState {
   VehicleDetailsSuccess copyWith({
     VehicleDetailsEntity? details,
     bool? isDeleted,
+    bool? deleteLoading,
   }) =>
       VehicleDetailsSuccess._internal(
         details ?? this.details,
-        isDeleted: isDeleted ?? this.isDeleted,
       );
 }
 
