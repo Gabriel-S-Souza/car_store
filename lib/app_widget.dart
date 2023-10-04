@@ -21,8 +21,9 @@ class AppWidget extends StatelessWidget {
             child: GlobalScaffoldWidget(child: child!),
             breakpoints: [
               const Breakpoint(start: 0, end: 550, name: MOBILE),
-              const Breakpoint(start: 550, end: 1050, name: TABLET),
-              const Breakpoint(start: 550, end: 4000, name: DESKTOP),
+              const Breakpoint(start: 1000, end: 1800, name: TABLET),
+              const Breakpoint(start: 1800, end: 2900, name: DESKTOP),
+              const Breakpoint(start: 2900, end: 4000, name: '4k'),
             ],
           ),
         ),

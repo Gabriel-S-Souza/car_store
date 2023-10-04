@@ -8,6 +8,7 @@ import '../../../../setups/app_routes/app_routes.dart';
 import '../../../../setups/di/service_locator.dart';
 import '../../../../shared/domain/entities/roles.dart';
 import '../../../../shared/presentation/widgets/header_screen_widget.dart';
+import '../../../../shared/presentation/widgets/responsive_padding_widget.dart';
 import '../blocs/home/home_bloc.dart';
 import '../blocs/home/home_state.dart';
 import '../blocs/registration/vehicle_registration_bloc.dart';
@@ -38,20 +39,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: HeaderScreenWidget(
-          title: 'Car Store',
-          onSecondaryTap: AppController.I.user.role == Roles.admin
-              ? () {
-                  AppController.I.setNavBarIndex(1);
-                  AppController.I.logout();
-                  context.goNamed(RouteName.login.name);
-                }
-              : null,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0).copyWith(top: 0),
-          child: BlocListener<VehicleRegistrationBloc, VehicleRegistrationState>(
+  Widget build(BuildContext context) => ResponsivePadding(
+        isScreenWrapper: true,
+        child: Scaffold(
+          appBar: HeaderScreenWidget(
+            title: 'Car Store',
+            onSecondaryTap: AppController.I.user.role == Roles.admin
+                ? () {
+                    AppController.I.setNavBarIndex(1);
+                    AppController.I.logout();
+                    context.goNamed(RouteName.login.name);
+                  }
+                : null,
+          ),
+          body: BlocListener<VehicleRegistrationBloc, VehicleRegistrationState>(
             bloc: registrationBloc,
             listener: (context, state) {
               if (state is VehicleRegistrationSuccess) {
@@ -90,15 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          floatingActionButton: AppController.I.user.role == Roles.admin
+              ? FloatingActionButton(
+                  onPressed: () {
+                    bloc.clearError();
+                    context.goNamed(RouteName.registerVehicle.name) as bool?;
+                  },
+                  child: const Icon(Icons.add),
+                )
+              : null,
         ),
-        floatingActionButton: AppController.I.user.role == Roles.admin
-            ? FloatingActionButton(
-                onPressed: () {
-                  bloc.clearError();
-                  context.goNamed(RouteName.registerVehicle.name) as bool?;
-                },
-                child: const Icon(Icons.add),
-              )
-            : null,
       );
 }

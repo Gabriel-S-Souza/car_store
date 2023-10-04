@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../setups/di/service_locator.dart';
 import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
 import '../../../../shared/presentation/widgets/header_screen_widget.dart';
+import '../../../../shared/presentation/widgets/responsive_padding_widget.dart';
 import '../../../../shared/presentation/widgets/text_field_widget.dart';
 import '../../domain/entities/vehicle_details_entity.dart';
 import '../blocs/registration/vehicle_registration_bloc.dart';
@@ -67,167 +68,153 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
           create: (context) => bloc,
           child: BlocBuilder<VehicleRegistrationBloc, VehicleRegistrationState>(
             bloc: bloc,
-            builder: (context, state) => Scaffold(
-              appBar: HeaderScreenWidget(
-                title: widget.vehicleId != null ? 'Editar Veículo' : 'Cadastrar Veículo',
-                onPrimaryTap: () => context.pop(),
-              ),
-              body: Form(
-                key: _formKey,
-                child: ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    const SizedBox(height: 22),
-                    ImageFieldWidget(
-                      initialImage: widget.vehicle?.image,
-                      onImageSelected: (image) {
-                        vehicleEditingDto.value.image = image;
-                        vehicleEditingDto.value = vehicleEditingDto.value.copyWith(image: image);
-                      },
-                    ),
-                    const SizedBox(height: 28),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.name,
-                      label: 'Nome',
-                      onChanged: (value) =>
-                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(name: value),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.brand,
-                      label: 'Marca',
-                      onChanged: (value) =>
-                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(brand: value),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.model,
-                      label: 'Modelo',
-                      onChanged: (value) =>
-                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(model: value),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.price.toString(),
-                      label: 'Preço',
-                      inputFormatter: priceFormatter,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) =>
-                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(
-                        price: priceFormatter.getUnformattedValue().toDouble(),
-                      ),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.description,
-                      label: 'Descrição',
-                      onChanged: (value) => vehicleEditingDto.value =
-                          vehicleEditingDto.value.copyWith(description: value),
-                    ),
-                    const SizedBox(height: 22),
-                    ValueListenableBuilder<VehicleEditingDto>(
-                      valueListenable: vehicleEditingDto,
-                      builder: (context, vehicleEditing, child) => DropSelectorWidget(
-                        hint: 'Condição',
-                        textItems: Condition.values.map((e) => e.labelToDisplay).toList(),
-                        items: Condition.values,
-                        selectedValue: vehicleEditing.condition,
-                        onChanged: (value) =>
-                            vehicleEditingDto.value = vehicleEditing.copyWith(condition: value),
-                      ),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.year.toString(),
-                      label: 'Ano',
-                      mask: '####',
-                      filter: {'#': RegExp(r'[0-9]')},
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => vehicleEditingDto.value =
-                          vehicleEditingDto.value.copyWith(year: int.tryParse(value ?? '0') ?? 0),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue:
-                          widget.vehicle?.mileage != null ? widget.vehicle!.mileage.toString() : '',
-                      label: 'Km rodados (Opcional)',
-                      mask: '#############',
-                      filter: {'#': RegExp(r'[0-9]')},
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => vehicleEditingDto.value = vehicleEditingDto.value
-                          .copyWith(mileage: int.tryParse(value ?? '0') ?? 0),
-                    ),
-                    const SizedBox(height: 22),
-                    TextFieldWidget(
-                      initialValue: widget.vehicle?.engine ?? '',
-                      hint: 'Ex: 1.4',
-                      label: 'Motor (Opcional)',
-                      mask: '#########',
-                      filter: {'#': RegExp(r'[0-9.]')},
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) =>
-                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(engine: value),
-                    ),
-                    const SizedBox(height: 28),
-                  ],
+            builder: (context, state) => ResponsivePadding(
+              isScreenWrapper: true,
+              child: Scaffold(
+                appBar: HeaderScreenWidget(
+                  title: widget.vehicleId != null ? 'Editar Veículo' : 'Cadastrar Veículo',
+                  onPrimaryTap: () => context.pop(),
                 ),
-              ),
-              persistentFooterButtons: [
-                FractionallySizedBox(
-                  widthFactor: 1,
-                  child: ValueListenableBuilder<VehicleEditingDto>(
+                body: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 22),
+                      ImageFieldWidget(
+                        initialImage: widget.vehicle?.image,
+                        onImageSelected: (image) {
+                          vehicleEditingDto.value.image = image;
+                          vehicleEditingDto.value = vehicleEditingDto.value.copyWith(image: image);
+                        },
+                      ),
+                      const SizedBox(height: 28),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.name,
+                        label: 'Nome',
+                        onChanged: (value) =>
+                            vehicleEditingDto.value = vehicleEditingDto.value.copyWith(name: value),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.brand,
+                        label: 'Marca',
+                        onChanged: (value) => vehicleEditingDto.value =
+                            vehicleEditingDto.value.copyWith(brand: value),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.model,
+                        label: 'Modelo',
+                        onChanged: (value) => vehicleEditingDto.value =
+                            vehicleEditingDto.value.copyWith(model: value),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.price.toString(),
+                        label: 'Preço',
+                        inputFormatter: priceFormatter,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) =>
+                            vehicleEditingDto.value = vehicleEditingDto.value.copyWith(
+                          price: priceFormatter.getUnformattedValue().toDouble(),
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.description,
+                        label: 'Descrição',
+                        onChanged: (value) => vehicleEditingDto.value =
+                            vehicleEditingDto.value.copyWith(description: value),
+                      ),
+                      const SizedBox(height: 22),
+                      ValueListenableBuilder<VehicleEditingDto>(
+                        valueListenable: vehicleEditingDto,
+                        builder: (context, vehicleEditing, child) => DropSelectorWidget(
+                          hint: 'Condição',
+                          textItems: Condition.values.map((e) => e.labelToDisplay).toList(),
+                          items: Condition.values,
+                          selectedValue: vehicleEditing.condition,
+                          onChanged: (value) =>
+                              vehicleEditingDto.value = vehicleEditing.copyWith(condition: value),
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.year.toString(),
+                        label: 'Ano',
+                        mask: '####',
+                        filter: {'#': RegExp(r'[0-9]')},
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) => vehicleEditingDto.value =
+                            vehicleEditingDto.value.copyWith(year: int.tryParse(value ?? '0') ?? 0),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.mileage != null
+                            ? widget.vehicle!.mileage.toString()
+                            : '',
+                        label: 'Km rodados (Opcional)',
+                        mask: '#############',
+                        filter: {'#': RegExp(r'[0-9]')},
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) => vehicleEditingDto.value = vehicleEditingDto.value
+                            .copyWith(mileage: int.tryParse(value ?? '0') ?? 0),
+                      ),
+                      const SizedBox(height: 22),
+                      TextFieldWidget(
+                        initialValue: widget.vehicle?.engine ?? '',
+                        hint: 'Ex: 1.4',
+                        label: 'Motor (Opcional)',
+                        mask: '#########',
+                        filter: {'#': RegExp(r'[0-9.]')},
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) => vehicleEditingDto.value =
+                            vehicleEditingDto.value.copyWith(engine: value),
+                      ),
+                      const SizedBox(height: 28),
+                    ],
+                  ),
+                ),
+                persistentFooterButtons: [
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: ValueListenableBuilder<VehicleEditingDto>(
                       valueListenable: vehicleEditingDto,
                       builder: (context, vehicleEditing, child) => ElevatedButtonWidget(
-                            enabled: vehicleEditingDto.value.isValid,
-                            onPressed: () async {
-                              if (vehicleEditingDto.value.isValid) {
-                                await bloc.writeVehicle(
-                                  vehicleEditingDto.value.toEntity(),
-                                  isUpdate,
-                                );
-                                if (bloc.state is VehicleRegistrationSuccess &&
-                                    (bloc.state as VehicleRegistrationSuccess).isUpdateOrRegister) {
-                                  Future.delayed(
-                                    const Duration(milliseconds: 500),
-                                    () {
-                                      context.pop();
-                                    },
-                                  );
-                                }
-                              }
-                            },
-                            child: state is VehicleRegistrationLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : Text(
-                                    isUpdate ? 'Atualizar' : 'Cadastrar',
-                                  ),
-                          )),
-                ),
-                // const SizedBox(height: 22),
-                // OutlinedButtonWidget(
-                //   onPressed: () async {
-                //     final entity = mockVehicle.toEntity();
-                //     nameController.text = entity.name;
-                //     brandController.text = entity.brand;
-                //     modelController.text = entity.model;
-                //     priceController.text = entity.price.toString();
-                //     descriptionController.text = entity.description;
-                //     yearController.text = entity.year.toString();
-                //     mileageController.text = entity.mileage.toString();
-                //     engineController.text = entity.engine ?? '';
-                //     vehicleEditingDto.value = mockVehicle;
-                //     vehicleEditingDto.value = mockVehicle.copyWith(
-                //       condition: Condition.needsRepair,
-                //     );
-                //   },
-                //   child: const Text('Mock'),
-              ],
+                        enabled: vehicleEditingDto.value.isValid,
+                        onPressed: () async {
+                          if (vehicleEditingDto.value.isValid) {
+                            await bloc.writeVehicle(
+                              vehicleEditingDto.value.toEntity(),
+                              isUpdate,
+                            );
+                            if (bloc.state is VehicleRegistrationSuccess &&
+                                (bloc.state as VehicleRegistrationSuccess).isUpdateOrRegister) {
+                              Future.delayed(
+                                const Duration(milliseconds: 500),
+                                () {
+                                  context.pop();
+                                },
+                              );
+                            }
+                          }
+                        },
+                        child: state is VehicleRegistrationLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                isUpdate ? 'Atualizar' : 'Cadastrar',
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

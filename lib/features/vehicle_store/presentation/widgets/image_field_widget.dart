@@ -47,10 +47,10 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+                      end: Alignment.bottomRight,
                       colors: [
-                        Theme.of(context).primaryColor,
-                        Theme.of(context).secondaryHeaderColor,
+                        Theme.of(context).cardColor,
+                        Theme.of(context).cardColor.withAlpha(150)
                       ],
                     ),
                   ),

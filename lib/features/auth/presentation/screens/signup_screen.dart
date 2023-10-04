@@ -7,6 +7,7 @@ import '../../../../setups/di/service_locator.dart';
 import '../../../../shared/presentation/toast/toast_controller.dart';
 import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
 import '../../../../shared/presentation/widgets/outlined_button_widget.dart';
+import '../../../../shared/presentation/widgets/responsive_padding_widget.dart';
 import '../../../../shared/presentation/widgets/text_field_widget.dart';
 import '../blocs/register/register_use_state.dart';
 import '../blocs/register/register_user_bloc.dart';
@@ -38,124 +39,98 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) => SafeArea(
-        child: Scaffold(
-          body: BlocProvider<RegisterUserBloc>(
-            create: (context) => registerUserBloc,
-            child: BlocBuilder<RegisterUserBloc, RegisterUserState>(
-              builder: (context, state) => Center(
-                child: Form(
-                  key: formKey,
-                  child: ListView(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      const Text(
-                        'Cadastro',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      const Text(
-                        'Nome',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFieldWidget(
-                        controller: nameController,
-                        validator: validateName,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Email',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFieldWidget(
-                        controller: emailController,
-                        validator: validateEmail,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Senha',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFieldWidget(
-                        controller: passwordController,
-                        obscureText: state.hidePassword,
-                        textInputAction: TextInputAction.done,
-                        validator: validatePassword,
-                        suffix: IconButton(
-                          onPressed: () => registerUserBloc.hidePassword(!state.hidePassword),
-                          icon: Icon(
-                            state.hidePassword ? Icons.visibility_off : Icons.visibility,
+        child: ResponsivePadding(
+          isScreenWrapper: true,
+          child: Scaffold(
+            body: BlocProvider<RegisterUserBloc>(
+              create: (context) => registerUserBloc,
+              child: BlocBuilder<RegisterUserBloc, RegisterUserState>(
+                builder: (context, state) => Center(
+                  child: Form(
+                    key: formKey,
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        const Text(
+                          'Cadastro',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Confirmar senha',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 55),
+                        TextFieldWidget(
+                          label: 'Nome',
+                          controller: nameController,
+                          validator: validateName,
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextFieldWidget(
-                        controller: confirmPasswordController,
-                        obscureText: state.hideConfirmPassword,
-                        textInputAction: TextInputAction.done,
-                        validator: validateConfirmPassword,
-                        suffix: IconButton(
-                          onPressed: () =>
-                              registerUserBloc.hideConfirmPassword(!state.hideConfirmPassword),
-                          icon: Icon(
-                            state.hideConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                        const SizedBox(height: 16),
+                        TextFieldWidget(
+                          label: 'Email',
+                          controller: emailController,
+                          validator: validateEmail,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldWidget(
+                          label: 'Senha',
+                          controller: passwordController,
+                          obscureText: state.hidePassword,
+                          textInputAction: TextInputAction.done,
+                          validator: validatePassword,
+                          suffix: IconButton(
+                            onPressed: () => registerUserBloc.hidePassword(!state.hidePassword),
+                            icon: Icon(
+                              state.hidePassword ? Icons.visibility_off : Icons.visibility,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButtonWidget(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            await registerUserBloc.register(
-                              nameController.text,
-                              emailController.text,
-                              passwordController.text,
-                            );
-                            if (registerUserBloc.state.isSuccess && mounted) {
-                              context.goNamed(RouteName.login.name);
+                        const SizedBox(height: 16),
+                        TextFieldWidget(
+                          label: 'Confirmar senha',
+                          controller: confirmPasswordController,
+                          obscureText: state.hideConfirmPassword,
+                          textInputAction: TextInputAction.done,
+                          validator: validateConfirmPassword,
+                          suffix: IconButton(
+                            onPressed: () =>
+                                registerUserBloc.hideConfirmPassword(!state.hideConfirmPassword),
+                            icon: Icon(
+                              state.hideConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButtonWidget(
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              await registerUserBloc.register(
+                                nameController.text,
+                                emailController.text,
+                                passwordController.text,
+                              );
+                              if (registerUserBloc.state.isSuccess && mounted) {
+                                context.goNamed(RouteName.login.name);
+                              }
                             }
-                          }
-                        },
-                        child: state.isLoading
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                'Cadastrar',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                          },
+                          child: state.isLoading
+                              ? const CircularProgressIndicator()
+                              : const Text(
+                                  'Cadastrar',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                      ),
-                      const SizedBox(height: 16),
-                      OutlinedButtonWidget(
-                        onPressed: () => context.goNamed(RouteName.login.name),
-                        text: 'Já possui uma conta? Entrar',
-                      ),
-                    ],
+                        ),
+                        const SizedBox(height: 16),
+                        OutlinedButtonWidget(
+                          onPressed: () => context.goNamed(RouteName.login.name),
+                          text: 'Já possui uma conta? Entrar',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

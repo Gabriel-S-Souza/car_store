@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../../../app_controller.dart';
 import '../../../../setups/app_routes/app_routes.dart';
@@ -12,10 +11,12 @@ import '../../../../shared/domain/entities/roles.dart';
 import '../../../../shared/presentation/widgets/elevate_button_widget.dart';
 import '../../../../shared/presentation/widgets/header_screen_widget.dart';
 import '../../../../shared/presentation/widgets/outlined_button_widget.dart';
+import '../../../../shared/presentation/widgets/responsive_padding_widget.dart';
 import '../blocs/details/vehicle_detail_bloc.dart';
 import '../blocs/details/vehicle_detail_state.dart';
 import '../blocs/registration/vehicle_registration_bloc.dart';
 import '../blocs/registration/vehicle_registration_state.dart';
+import '../widgets/text_tile_widget.dart';
 
 class VehicleDetailsScreen extends StatefulWidget {
   final int vehicleId;
@@ -54,21 +55,21 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
         },
         child: BlocBuilder<VehicleDetailsBloc, VehicleDetailsState>(
           bloc: bloc,
-          builder: (context, state) => Scaffold(
-            appBar: HeaderScreenWidget(
-              title: state is VehicleDetailsSuccess ? state.details.name : 'Car Store',
-              onPrimaryTap: () => context.pop(),
-              onSecondaryTap: AppController.I.user.role == Roles.admin
-                  ? () {
-                      AppController.I.setNavBarIndex(1);
-                      AppController.I.logout();
-                      context.goNamed(RouteName.login.name);
-                    }
-                  : null,
-            ),
-            body: ResponsiveScaledBox(
-              width: null,
-              child: Builder(
+          builder: (context, state) => ResponsivePadding(
+            isScreenWrapper: true,
+            child: Scaffold(
+              appBar: HeaderScreenWidget(
+                title: state is VehicleDetailsSuccess ? state.details.name : 'Car Store',
+                onPrimaryTap: () => context.pop(),
+                onSecondaryTap: AppController.I.user.role == Roles.admin
+                    ? () {
+                        AppController.I.setNavBarIndex(1);
+                        AppController.I.logout();
+                        context.goNamed(RouteName.login.name);
+                      }
+                    : null,
+              ),
+              body: Builder(
                 builder: (context) {
                   if (state is VehicleDetailsLoading) {
                     return const Center(
@@ -93,152 +94,145 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                          margin: ResponsiveValue<EdgeInsetsGeometry>(
-                            context,
-                            conditionalValues: [
-                              Condition.largerThan(
-                                name: TABLET,
-                                value: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                              ),
-                            ],
-                            defaultValue: const EdgeInsets.all(16),
-                          ).value,
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 20),
-                              BrandAndNameWidget(
-                                brand: state.details.brand,
-                                name: state.details.name,
-                              ),
-                              const SizedBox(height: 10),
-                              _DescriptionWidget(description: state.details.description),
-                              const SizedBox(height: 10),
-                              _PriceWidget(price: state.details.price),
-                              const SizedBox(height: 20),
-                              const Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Informações',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 20),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  color: Theme.of(context).scaffoldBackgroundColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
-                                      blurRadius: 6.0,
-                                      blurStyle: BlurStyle.outer,
-                                      offset: const Offset(0, 3),
+                        Column(
+                          children: [
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextTileWidget(
+                                      label: 'Nome',
+                                      content: state.details.name,
+                                      titleColor: Theme.of(context).colorScheme.onSurface,
+                                      textColor:
+                                          Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                    ),
+                                    TextTileWidget(
+                                      label: 'Marca',
+                                      content: state.details.brand,
+                                      titleColor: Theme.of(context).colorScheme.onSurface,
+                                      textColor:
+                                          Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                                     ),
                                   ],
                                 ),
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: state.tableInformations.length,
-                                  itemBuilder: (context, index) {
-                                    final entry = state.tableInformations[index];
-                                    return _InformationRowWidget(
-                                      ikey: entry.keys.first,
-                                      value: entry.values.first,
-                                      rowColor: index.isEven
-                                          ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
-                                          : Theme.of(context).cardColor,
-                                    );
-                                  },
+                                Container(
+                                  alignment: Alignment.center,
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                                  height: 40,
+                                  width: 1,
                                 ),
+                                _PriceWidget(price: state.details.price),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            _DescriptionWidget(description: state.details.description),
+                            const SizedBox(height: 20),
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 20),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                                color: Theme.of(context).scaffoldBackgroundColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                                    blurRadius: 2.0,
+                                    blurStyle: BlurStyle.outer,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(height: 30),
-                              AppController.I.user.role != Roles.admin
-                                  ? FractionallySizedBox(
-                                      widthFactor: 0.5,
-                                      child: ElevatedButtonWidget(
-                                        onPressed: () => registrationBloc.buy(widget.vehicleId),
-                                        child: const Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Flexible(
-                                              child: AutoSizeText(
-                                                'Comprar',
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              if (AppController.I.user.role == Roles.admin) ...[
-                                FractionallySizedBox(
-                                  widthFactor: 0.5,
-                                  child: ElevatedButtonWidget(
-                                    onPressed: () => context.goNamed(
-                                      'edit',
-                                      pathParameters: {'vehicleId': widget.vehicleId.toString()},
-                                      extra: state.details,
-                                    ),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: state.tableInformations.length,
+                                itemBuilder: (context, index) {
+                                  final entry = state.tableInformations[index];
+                                  return _InformationRowWidget(
+                                    ikey: entry.keys.first,
+                                    value: entry.values.first,
+                                    rowColor: index.isEven
+                                        ? Theme.of(context).colorScheme.scrim.withOpacity(0.3)
+                                        : Theme.of(context).cardColor,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            AppController.I.user.role != Roles.admin
+                                ? ElevatedButtonWidget(
+                                    onPressed: () => registrationBloc.buy(widget.vehicleId),
                                     child: const Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Flexible(
                                           child: AutoSizeText(
-                                            'Editar',
+                                            'Comprar',
                                             maxLines: 1,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  )
+                                : const SizedBox(),
+                            if (AppController.I.user.role == Roles.admin) ...[
+                              ElevatedButtonWidget(
+                                onPressed: () => context.goNamed(
+                                  'edit',
+                                  pathParameters: {'vehicleId': widget.vehicleId.toString()},
+                                  extra: state.details,
                                 ),
-                                const SizedBox(height: 16),
-                                FractionallySizedBox(
-                                  widthFactor: 0.5,
-                                  child: BlocBuilder<VehicleRegistrationBloc,
-                                      VehicleRegistrationState>(
-                                    bloc: registrationBloc,
-                                    builder: (context, registrationState) => OutlinedButtonWidget(
-                                      onPressed: () async {
-                                        await registrationBloc.delete(widget.vehicleId);
-                                      },
-                                      borderColor: Colors.redAccent,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          registrationState is! VehicleRegistrationLoading
-                                              ? const Flexible(
-                                                  child: AutoSizeText(
-                                                    'Excluir',
-                                                    maxLines: 1,
-                                                    style: TextStyle(color: Colors.redAccent),
-                                                  ),
-                                                )
-                                              : const SizedBox(
-                                                  height: 20,
-                                                  width: 20,
-                                                  child: CircularProgressIndicator(
-                                                    color: Colors.redAccent,
-                                                  ),
-                                                ),
-                                        ],
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: AutoSizeText(
+                                        'Editar',
+                                        maxLines: 1,
                                       ),
                                     ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              BlocBuilder<VehicleRegistrationBloc, VehicleRegistrationState>(
+                                bloc: registrationBloc,
+                                builder: (context, registrationState) => OutlinedButtonWidget(
+                                  onPressed: () async {
+                                    await registrationBloc.delete(widget.vehicleId);
+                                  },
+                                  borderColor: Theme.of(context).colorScheme.primary,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      registrationState is! VehicleRegistrationLoading
+                                          ? Flexible(
+                                              child: AutoSizeText(
+                                                'Excluir',
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  color: Theme.of(context).colorScheme.primary,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                color: Theme.of(context).colorScheme.primary,
+                                              ),
+                                            ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                              const SizedBox(height: 28),
+                              ),
                             ],
-                          ),
+                            const SizedBox(height: 28),
+                          ],
                         ),
                       ],
                     );
@@ -252,26 +246,6 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                 },
               ),
             ),
-          ),
-        ),
-      );
-}
-
-class BrandAndNameWidget extends StatelessWidget {
-  final String brand;
-  final String name;
-
-  const BrandAndNameWidget({super.key, required this.brand, required this.name});
-
-  @override
-  Widget build(BuildContext context) => Align(
-        alignment: Alignment.center,
-        child: Text(
-          '$brand - $name',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: Colors.amberAccent,
           ),
         ),
       );
@@ -302,26 +276,21 @@ class _PriceWidget extends StatelessWidget {
   const _PriceWidget({Key? key, required this.price}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Align(
-        alignment: Alignment.center,
-        child: RichText(
-          text: TextSpan(
-            text: 'Por apenas: ',
-            style: const TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
-              color: Colors.amber,
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            Formatter.doubleToCurrency(price),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Theme.of(context).colorScheme.secondary,
             ),
-            children: [
-              TextSpan(
-                text: Formatter.doubleToCurrency(price),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.amberAccent,
-                ),
-              ),
-            ],
           ),
         ),
       );
@@ -342,7 +311,7 @@ class _InformationRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         color: rowColor,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -351,7 +320,7 @@ class _InformationRowWidget extends StatelessWidget {
               child: Text(
                 ikey,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -361,7 +330,7 @@ class _InformationRowWidget extends StatelessWidget {
               flex: 2,
               child: AutoSizeText(
                 value,
-                maxFontSize: 14,
+                maxFontSize: 12,
                 minFontSize: 8,
                 maxLines: 3,
                 textAlign: TextAlign.end,

@@ -67,6 +67,7 @@ mixin HttpErrorHandler {
       case DioExceptionType.badResponse:
         return ServerFailure(message);
       case DioExceptionType.connectionError:
+        return const OfflineFailure();
       case DioExceptionType.unknown:
         if (e.error is SocketException &&
             e.error.toString().toLowerCase().contains('network is unreachable')) {
