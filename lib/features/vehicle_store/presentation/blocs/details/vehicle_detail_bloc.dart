@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../shared/presentation/toast/toast_controller.dart';
+import '../../../domain/use_cases/delete_vehicle_use_case.dart';
 import '../../../domain/use_cases/get_vehicle_details_use_case.dart';
 import 'vehicle_detail_state.dart';
 
@@ -9,6 +10,7 @@ class VehicleDetailsBloc extends Cubit<VehicleDetailsState> {
 
   VehicleDetailsBloc({
     required GetVehicleDetailsUseCase getVehicleDetails,
+    required DeleteVehicleUseCase deleteVehicle,
   })  : _getVehicleDetails = getVehicleDetails,
         super(VehicleDetailsInitial());
 

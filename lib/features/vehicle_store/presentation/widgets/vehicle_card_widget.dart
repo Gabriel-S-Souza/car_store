@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/vehicle_entity.dart';
@@ -64,21 +65,34 @@ class VehicleCardWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(vehicle.name,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      AutoSizeText(
+                        vehicle.name,
+                        maxLines: 1,
+                        maxFontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const Divider(height: 8),
-                      Text(
+                      AutoSizeText(
                         vehicle.brand,
+                        maxLines: 1,
+                        maxFontSize: 12,
+                        minFontSize: 10,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      AutoSizeText(
                         'R\$ ${(vehicle.price).toStringAsFixed(2)}',
+                        maxLines: 2,
+                        maxFontSize: 10,
+                        minFontSize: 6,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.amber,

@@ -33,6 +33,7 @@ Future<void> checkToken(
         // handles with expired token
       }
       handler.next(options);
+      return;
     }
   }
   handler.next(options);

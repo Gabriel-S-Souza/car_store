@@ -1,18 +1,16 @@
 import '../../../../../setups/api_routes/api_routes.dart';
 import '../../../../../setups/http/http_client.dart';
-import '../../../../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
 import '../../../../../shared/domain/entities/failure.dart';
 import '../../../../../shared/domain/entities/result.dart';
 import '../../models/vehicle_details_model.dart';
 import '../../models/vehicle_model.dart';
 import 'vehicle_data_source.dart';
 
-class VehicleDataSourceImp implements VehicleDataSource {
+class VehicleReaderDataSourceImp implements VehicleReaderDataSource {
   final HttpClient _httpClient;
 
-  VehicleDataSourceImp({
+  VehicleReaderDataSourceImp({
     required HttpClient httpClient,
-    required SecureLocalStorage secureLocalStorage,
   }) : _httpClient = httpClient;
 
   @override

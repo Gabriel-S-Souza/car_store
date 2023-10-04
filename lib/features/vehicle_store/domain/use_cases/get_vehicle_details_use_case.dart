@@ -1,16 +1,16 @@
 import '../../../../shared/domain/entities/result.dart';
 import '../entities/vehicle_details_entity.dart';
-import '../repositories/vehicle_repository.dart';
+import '../repositories/vehicle_reader_repository.dart';
 
 abstract class GetVehicleDetailsUseCase {
   Future<Result<VehicleDetailsEntity>> call(int vehicleId);
 }
 
 class GetVehicleDetailsUseCaseImp implements GetVehicleDetailsUseCase {
-  final VehicleRepository _vehicleRepository;
+  final VehicleReaderRepository _vehicleRepository;
 
   const GetVehicleDetailsUseCaseImp({
-    required VehicleRepository vehicleRepository,
+    required VehicleReaderRepository vehicleRepository,
   }) : _vehicleRepository = vehicleRepository;
 
   @override

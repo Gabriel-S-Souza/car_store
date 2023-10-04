@@ -43,4 +43,13 @@ class HomeBloc extends Cubit<HomeState> {
       },
     );
   }
+
+  void clearList() {
+    _page = 1;
+    emit(state.copyWith(vehicles: [], errorMessage: null));
+  }
+
+  void clearError() {
+    emit(state.copyWith(errorMessage: null));
+  }
 }

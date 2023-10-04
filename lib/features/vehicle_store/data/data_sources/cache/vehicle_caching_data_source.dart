@@ -3,11 +3,11 @@ import '../../models/vehicle_details_model.dart';
 import '../../models/vehicle_model.dart';
 import '../remoto/vehicle_data_source.dart';
 
-abstract class VehicleCachingDataSource implements VehicleDataSource {
-  final VehicleDataSource _vehicleRemoteDataSource;
+abstract class VehicleCachingDataSource implements VehicleReaderDataSource {
+  final VehicleReaderDataSource _vehicleRemoteDataSource;
 
   VehicleCachingDataSource({
-    required VehicleDataSource vehicleRemoteDataSource,
+    required VehicleReaderDataSource vehicleRemoteDataSource,
   }) : _vehicleRemoteDataSource = vehicleRemoteDataSource;
 
   @override

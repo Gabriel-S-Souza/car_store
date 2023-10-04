@@ -20,6 +20,25 @@ class GridVehiclesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
 
+    if (vehicles.isEmpty && !isLoading) {
+      return GridView(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 0.82,
+          ),
+          children: [
+            Center(
+              child: Text(
+                'Nenhum veículo encontrado',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+          ]);
+    }
+
     return GridView.builder(
       padding: const EdgeInsets.symmetric(vertical: 24),
       itemCount: isLoading ? vehicles.length + 1 : vehicles.length,
