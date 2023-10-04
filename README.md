@@ -62,17 +62,13 @@ Abra o projeto em um editor de código e baixe as dependências:
 ```
 flutter pub get
 ```
-
-Caso esteja executando a api co o docker compose up, substitua o argumento "API_URL" do arquivo ```env.json``` com o ip correto em que a api está executando na sua rede.
-
-```
-{
-    "API_URL": "http://192.168.1.3:3000"
-}
-```
-
-Selecione um dispositivo android ou ios ou selecione o chrome para a versão web. E então execute o app passando a seguinte flag.
+  
+Selecione um dispositivo/emulador ou selecione o chrome para a versão web. E então execute o app passando a seguinte flag.
 
 ```
 flutter run --dart-define-from-file=env.json
 ```
+Alternativamente, você pode executar com ```fn+F5```.
+
+OBS: Caso necessário, substitua o argumento "API_URL" do arquivo ```env.json``` com o ip correto em que a api está executando na sua rede.
+
