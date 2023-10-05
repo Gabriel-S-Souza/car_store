@@ -54,7 +54,7 @@ O projeto requer que a Car Store Api esteja executando na sua rede. Siga os pass
 A versão do Flutter utilizada no projeto foi a 3.13.5.
 Clone este repositório para o seu ambiente de desenvolvimento:
 ```
-git clone https://github.com/Gabriel-S-Souza/ar_store.git
+git clone https://github.com/Gabriel-S-Souza/car_store.git
 ```
 
 Abra o projeto em um editor de código e baixe as dependências:
