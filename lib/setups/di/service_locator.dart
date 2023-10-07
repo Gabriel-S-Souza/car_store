@@ -60,6 +60,9 @@ class ServiceLocator {
     );
 
     // Http client
+    //TODO: Injetar o dioApp
+    //TODO: Testar mudar para factory para resolver problema do check token interceptando
+    // rotas desnecessárias
     registerSingleton<HttpClient>(HttpClient(dioApp));
 
     // Data sources

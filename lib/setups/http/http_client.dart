@@ -97,4 +97,8 @@ class HttpClient with HttpErrorHandler {
       throw handleError(e);
     }
   }
+
+  void addInterceptor(Interceptor interceptor) {
+    _dio.interceptors.add(interceptor);
+  }
 }

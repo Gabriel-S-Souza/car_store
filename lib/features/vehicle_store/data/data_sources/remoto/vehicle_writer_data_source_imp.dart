@@ -4,6 +4,7 @@ import '../../../../../setups/utils/storage_keys.dart';
 import '../../../../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
 import '../../../../../shared/domain/entities/failure.dart';
 import '../../../../../shared/domain/entities/result.dart';
+import '../../interceptors/check_token_interceptor.dart';
 import '../../models/vehicle_details_model.dart';
 import 'vehicle_data_source.dart';
 
@@ -15,7 +16,9 @@ class VehicleWriterDataSourceImp implements VehicleWriterDataSource {
     required HttpClient httpClient,
     required SecureLocalStorage secureLocalStorage,
   })  : _httpClient = httpClient,
-        _secureLocalStorage = secureLocalStorage;
+        _secureLocalStorage = secureLocalStorage {
+    _httpClient.addInterceptor(CheckTokenInterceptor());
+  }
 
   @override
   Future<Result<VoidSuccess>> registerVehicle(VehicleDetailsModel vehicle) async {
