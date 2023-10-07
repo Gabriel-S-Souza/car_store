@@ -23,8 +23,9 @@ class TextTileWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            AutoSizeText(
               label,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.w400,
@@ -34,12 +35,13 @@ class TextTileWidget extends StatelessWidget {
             const SizedBox(height: 9),
             AutoSizeText(
               content,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: titleColor,
                 fontWeight: FontWeight.w400,
                 fontSize: 20,
               ),
-              maxLines: 1,
             ),
           ],
         ),

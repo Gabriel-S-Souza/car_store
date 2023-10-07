@@ -101,32 +101,38 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextTileWidget(
-                                      label: 'Nome',
-                                      content: state.details.name,
-                                      titleColor: Theme.of(context).colorScheme.onSurface,
-                                      textColor:
-                                          Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                                    ),
-                                    TextTileWidget(
-                                      label: 'Marca',
-                                      content: state.details.brand,
-                                      titleColor: Theme.of(context).colorScheme.onSurface,
-                                      textColor:
-                                          Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                                    ),
-                                  ],
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextTileWidget(
+                                        label: 'Nome',
+                                        content: state.details.name,
+                                        titleColor: Theme.of(context).colorScheme.onSurface,
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(0.6),
+                                      ),
+                                      TextTileWidget(
+                                        label: 'Marca',
+                                        content: state.details.brand,
+                                        titleColor: Theme.of(context).colorScheme.onSurface,
+                                        textColor: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(0.6),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                                const SizedBox(
                                   height: 40,
-                                  width: 1,
+                                  width: 8,
                                 ),
-                                _PriceWidget(price: state.details.price),
+                                Flexible(
+                                  child: _PriceWidget(price: state.details.price),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 12),
