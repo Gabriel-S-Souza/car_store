@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-import '../../shared/domain/entities/response_app.dart';
 import 'http_error_handler.dart';
+import 'response_app.dart';
 
 class HttpClient with HttpErrorHandler {
   final Dio _dio;
