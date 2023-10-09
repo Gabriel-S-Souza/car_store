@@ -3,7 +3,7 @@ class ResponseApp<T> {
   final int? statusCode;
   final String? statusMessage;
 
-  ResponseApp({
+  const ResponseApp({
     this.data,
     this.statusCode,
     this.statusMessage,
