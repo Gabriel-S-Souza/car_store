@@ -1,7 +1,7 @@
 import '../../../../../setups/api_routes/api_routes.dart';
 import '../../../../../setups/http/http_client.dart';
+import '../../../../../setups/local_storage/secure_local_storage.dart';
 import '../../../../../setups/utils/storage_keys.dart';
-import '../../../../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
 import '../../../../../shared/domain/entities/failure.dart';
 import '../../../../../shared/domain/entities/result.dart';
 import '../../interceptors/check_token_interceptor.dart';

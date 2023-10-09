@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../../../../../shared/data/data_sources/local_storage/local_storage_data_source.dart';
+import '../../../../../setups/local_storage/local_storage.dart';
 import '../../../../../shared/domain/entities/result.dart';
 import '../../models/vehicle_model.dart';
 import 'vehicle_caching_data_source.dart';

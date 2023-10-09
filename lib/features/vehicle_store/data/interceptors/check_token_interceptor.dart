@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../../../setups/di/service_locator.dart';
+import '../../../../setups/local_storage/secure_local_storage.dart';
 import '../../../../setups/utils/storage_keys.dart';
-import '../../../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
 import '../../../auth/data/datasources/refresh_token_data_source.dart';
 
 class CheckTokenInterceptor extends InterceptorsWrapper {

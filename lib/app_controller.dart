@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'features/auth/domain/entities/user_entity.dart';
+import 'setups/local_storage/secure_local_storage.dart';
 import 'setups/utils/storage_keys.dart';
-import 'shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
 
 class AppController extends ChangeNotifier {
   late final SecureLocalStorage _secureLocalStorage;

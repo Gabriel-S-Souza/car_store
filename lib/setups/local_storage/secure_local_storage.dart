@@ -1,14 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'secure_local_storage.dart';
-
-class SecureLocalStorageImp implements SecureLocalStorage {
+class SecureLocalStorage {
   final FlutterSecureStorage _storage;
   final options = const IOSOptions(accessibility: KeychainAccessibility.first_unlock);
 
-  SecureLocalStorageImp(this._storage);
+  SecureLocalStorage(this._storage);
 
-  @override
   Future<String?> get(String key) async {
     try {
       return _storage.read(key: key);
@@ -17,10 +14,8 @@ class SecureLocalStorageImp implements SecureLocalStorage {
     }
   }
 
-  @override
-  Future<void> set(String key, String value) =>
+  Future<void> set({required String key, required String value}) =>
       _storage.write(key: key, value: value, iOptions: options);
 
-  @override
   Future<void> delete(String key) => _storage.delete(key: key);
 }

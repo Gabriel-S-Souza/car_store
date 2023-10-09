@@ -29,12 +29,10 @@ import '../../features/vehicle_store/domain/use_cases/update_vehicle_use_case.da
 import '../../features/vehicle_store/presentation/blocs/details/vehicle_detail_bloc.dart';
 import '../../features/vehicle_store/presentation/blocs/home/home_bloc.dart';
 import '../../features/vehicle_store/presentation/blocs/registration/vehicle_registration_bloc.dart';
-import '../../shared/data/data_sources/local_storage/local_storage_data_source.dart';
-import '../../shared/data/data_sources/local_storage/local_storage_imp.dart';
-import '../../shared/data/data_sources/secure_local_storage/secure_local_storage.dart';
-import '../../shared/data/data_sources/secure_local_storage/secure_local_storage_imp.dart';
 import '../http/dio_app.dart';
 import '../http/http_client.dart';
+import '../local_storage/local_storage.dart';
+import '../local_storage/secure_local_storage.dart';
 
 class ServiceLocator {
   static final ServiceLocator I = ServiceLocator._internal();
@@ -47,16 +45,26 @@ class ServiceLocator {
     return I;
   }
 
+  T get<T extends Object>() => _getIt.get<T>();
+
+  void registerFactory<T extends Object>(T Function() factory) {
+    _getIt.registerFactory<T>(factory);
+  }
+
+  void registerSingleton<T extends Object>(T instance) {
+    _getIt.registerSingleton<T>(instance);
+  }
+
+  bool isRegistered<T extends Object>() => _getIt.isRegistered<T>();
+
   Future<void> setup() async {
     // Local storage
     registerSingleton<LocalStorage>(
-      LocalStorageImp(await SharedPreferences.getInstance()),
+      LocalStorage(await SharedPreferences.getInstance()),
     );
 
     registerSingleton<SecureLocalStorage>(
-      SecureLocalStorageImp(
-        const FlutterSecureStorage(),
-      ),
+      SecureLocalStorage(const FlutterSecureStorage()),
     );
 
     // Http client
@@ -191,16 +199,4 @@ class ServiceLocator {
 
     AppController.I.init(get());
   }
-
-  T get<T extends Object>() => _getIt.get<T>();
-
-  void registerFactory<T extends Object>(T Function() factory) {
-    _getIt.registerFactory<T>(factory);
-  }
-
-  void registerSingleton<T extends Object>(T instance) {
-    _getIt.registerSingleton<T>(instance);
-  }
-
-  bool isRegistered<T extends Object>() => _getIt.isRegistered<T>();
 }
