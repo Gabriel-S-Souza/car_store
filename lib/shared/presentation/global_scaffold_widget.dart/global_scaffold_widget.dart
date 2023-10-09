@@ -17,10 +17,10 @@ class GlobalScaffoldWidget extends StatelessWidget {
               bottomNavigationBar: AnimatedBuilder(
                 animation: AppController.I,
                 builder: (context, animation) => BottomNavigationBar(
-                  currentIndex: AppController.I.navBarCurrentIndex,
-                  onTap: (value) {
-                    AppController.I.setNavBarIndex(value);
-                    AppRouter.router.goNamed(AppRouter.getRouteNameByNavIndex(value).name);
+                  currentIndex: AppController.I.navigationBarIndex,
+                  onTap: (index) {
+                    AppController.I.setNavigationBarIndex(index);
+                    AppRouter.goByNavIndex(index);
                   },
                   items: const [
                     BottomNavigationBarItem(

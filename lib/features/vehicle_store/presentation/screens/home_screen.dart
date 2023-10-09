@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: 'Car Store',
             onSecondaryTap: AppController.I.user.role == Roles.admin
                 ? () {
-                    AppController.I.setNavBarIndex(1);
+                    AppController.I.setNavigationBarIndex(1);
                     AppController.I.logout();
                     context.goNamed(RouteName.login.name);
                   }

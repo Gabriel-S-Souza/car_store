@@ -20,10 +20,12 @@ enum RouteName {
 }
 
 class AppRouter {
-  static RouteName getRouteNameByNavIndex(int index) {
-    if (index == 0) return RouteName.vehicles;
-    if (index == 1) return RouteName.login;
-    return RouteName.vehicles;
+  static void goByNavIndex(int index) {
+    if (index == 0) {
+      router.goNamed(RouteName.vehicles.name);
+    } else if (index == 1) {
+      router.goNamed(RouteName.login.name);
+    }
   }
 
   static final router = GoRouter(

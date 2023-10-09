@@ -15,16 +15,16 @@ class AppController extends ChangeNotifier {
   }
 
   UserEntity user = UserEntity.visitor();
-  int navBarCurrentIndex = 0;
+  int navigationBarIndex = 0;
 
   void setUser(UserEntity newUser) {
     user = newUser;
     notifyListeners();
   }
 
-  void setNavBarIndex(int index) async {
-    if (index == navBarCurrentIndex) return;
-    navBarCurrentIndex = index;
+  void setNavigationBarIndex(int index) async {
+    if (index == navigationBarIndex) return;
+    navigationBarIndex = index;
     notifyListeners();
   }
 

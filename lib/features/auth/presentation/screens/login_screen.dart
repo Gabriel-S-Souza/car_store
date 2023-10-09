@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               if (_loginCubit.state.user != null && mounted) {
                                 AppController.I.setUser(_loginCubit.state.user!);
-                                AppController.I.setNavBarIndex(0);
+                                AppController.I.setNavigationBarIndex(0);
                                 context.goNamed(RouteName.vehicles.name);
                               }
                             }
