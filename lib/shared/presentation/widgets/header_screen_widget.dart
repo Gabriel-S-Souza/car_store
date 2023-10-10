@@ -9,6 +9,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
   final IconData? secondaryIcon;
   final double fontSize;
   final bool centerTitle;
+  final Widget? leading;
 
   const HeaderScreenWidget({
     Key? key,
@@ -19,6 +20,7 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
     this.secondaryIcon,
     this.fontSize = 20,
     this.centerTitle = true,
+    this.leading,
   }) : super(key: key);
 
   @override
@@ -27,8 +29,8 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (onPrimaryTap == null && onSecondaryTap != null) const Spacer(),
-            if (onPrimaryTap != null)
+            if (onPrimaryTap == null && onSecondaryTap != null && leading == null) const Spacer(),
+            if (onPrimaryTap != null && leading == null)
               Flexible(
                 fit: FlexFit.loose,
                 child: Align(
@@ -47,6 +49,23 @@ class HeaderScreenWidget extends StatelessWidget implements PreferredSizeWidget 
                           size: 24,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+              ),
+            if (leading != null)
+              Flexible(
+                fit: FlexFit.loose,
+                child: Align(
+                  alignment: const Alignment(-1.2, 0.5),
+                  child: Visibility(
+                    visible: leading != null,
+                    child: IconButton(
+                      onPressed: onPrimaryTap,
+                      tooltip: 'Voltar',
+                      visualDensity: VisualDensity.compact,
+                      splashRadius: 28,
+                      icon: leading!,
                     ),
                   ),
                 ),

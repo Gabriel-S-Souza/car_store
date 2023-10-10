@@ -13,7 +13,7 @@ import '../blocs/registration/vehicle_registration_bloc.dart';
 import '../blocs/registration/vehicle_registration_state.dart';
 import '../dtos/vehicle_editing_dto.dart';
 import '../widgets/drop_selector_widget.dart';
-import '../widgets/image_field_widget.dart';
+import '../widgets/vehicle_image_field_widget.dart';
 
 class VehicleRegistrationScreen extends StatefulWidget {
   final int? vehicleId;
@@ -80,7 +80,7 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
                   child: ListView(
                     children: [
                       const SizedBox(height: 22),
-                      ImageFieldWidget(
+                      VehicleImageFieldWidget(
                         initialImage: widget.vehicle?.image,
                         onImageSelected: (image) {
                           vehicleEditingDto.value.image = image;

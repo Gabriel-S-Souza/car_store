@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +13,7 @@ import '../../../../shared/presentation/widgets/responsive_padding_widget.dart';
 import '../../../../shared/presentation/widgets/text_field_widget.dart';
 import '../blocs/register/register_use_state.dart';
 import '../blocs/register/register_user_bloc.dart';
+import '../widgets/user_image_field_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -26,6 +29,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final registerUserBloc = ServiceLocator.I.get<RegisterUserBloc>();
+
+  Uint8List? image;
 
   @override
   void dispose() {
@@ -59,7 +64,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 55),
+                        const SizedBox(height: 32),
+                        UserImageFieldWidget(
+                          onImageSelected: (image) => setState(() => this.image = image),
+                        ),
+                        const SizedBox(height: 32),
                         TextFieldWidget(
                           label: 'Nome',
                           controller: nameController,
@@ -108,6 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 nameController.text,
                                 emailController.text,
                                 passwordController.text,
+                                image,
                               );
                               if (registerUserBloc.state.isSuccess && mounted) {
                                 context.goNamed(RouteName.login.name);

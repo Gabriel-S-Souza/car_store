@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImageFieldWidget extends StatefulWidget {
+class UserImageFieldWidget extends StatefulWidget {
   final Uint8List? initialImage;
   final void Function(Uint8List? image)? onImageSelected;
 
-  const ImageFieldWidget({
+  const UserImageFieldWidget({
     super.key,
     this.initialImage,
     this.onImageSelected,
   });
 
   @override
-  State<ImageFieldWidget> createState() => _ImageFieldWidgetState();
+  State<UserImageFieldWidget> createState() => _UserImageFieldWidgetState();
 }
 
-class _ImageFieldWidgetState extends State<ImageFieldWidget> {
+class _UserImageFieldWidgetState extends State<UserImageFieldWidget> {
   Uint8List? image;
 
   @override
@@ -34,26 +34,29 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
   Orientation get orientation => MediaQuery.of(context).orientation;
 
   @override
-  Widget build(BuildContext context) => FractionallySizedBox(
-        widthFactor: orientation == Orientation.portrait ? 0.75 : 0.4,
+  Widget build(BuildContext context) => Center(
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            AspectRatio(
-              aspectRatio: 1.4,
-              child: InkWell(
-                onTap: () => pickImage(context),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Theme.of(context).cardColor,
-                        Theme.of(context).cardColor.withAlpha(150)
-                      ],
-                    ),
+            InkWell(
+              onTap: () => pickImage(context),
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).cardColor,
+                      Theme.of(context).cardColor.withAlpha(150)
+                    ],
                   ),
+                ),
+                child: CircleAvatar(
+                  radius: 48,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: image != null ? MemoryImage(image!) : null,
                   child: image == null
                       ? Icon(
                           Icons.photo_camera,
@@ -62,17 +65,14 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
                               ? MediaQuery.of(context).size.width * 0.14
                               : MediaQuery.of(context).size.width * 0.06,
                         )
-                      : Image.memory(
-                          image!,
-                          fit: BoxFit.cover,
-                        ),
+                      : null,
                 ),
               ),
             ),
             if (image != null)
               Positioned(
-                top: -16,
-                right: -16,
+                top: -12,
+                right: -12,
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () => pickImage(context),

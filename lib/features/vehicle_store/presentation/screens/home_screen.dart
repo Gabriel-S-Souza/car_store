@@ -14,6 +14,7 @@ import '../blocs/home/home_state.dart';
 import '../blocs/registration/vehicle_registration_bloc.dart';
 import '../blocs/registration/vehicle_registration_state.dart';
 import '../widgets/grid_vehicles_widget.dart';
+import '../widgets/user_avatar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,6 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           appBar: HeaderScreenWidget(
             title: 'Car Store',
+            leading: AppController.I.user.role != Roles.visitor
+                ? UserAvatarWidget(
+                    image: AppController.I.user.image,
+                  )
+                : null,
             onSecondaryTap: AppController.I.user.role == Roles.admin
                 ? () {
                     AppController.I.setNavigationBarIndex(1);

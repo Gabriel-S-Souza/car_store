@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../shared/presentation/toast/toast_controller.dart';
@@ -13,12 +15,13 @@ class RegisterUserBloc extends Cubit<RegisterUserState> {
   })  : _registerUser = registerUser,
         super(RegisterUserState.initial());
 
-  Future<void> register(String name, String email, String password) async {
+  Future<void> register(String name, String email, String password, Uint8List? image) async {
     emit(state.loading());
     final user = RegisterUserEntity(
       name: name,
       email: email,
       password: password,
+      image: image,
     );
     final result = await _registerUser(user);
     result.when(
