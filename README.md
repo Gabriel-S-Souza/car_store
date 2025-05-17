@@ -38,7 +38,6 @@ O Car Store é um aplicativo Flutter para listar e gerenciar veículos em uma lo
 - Testes unitários:
   - Os testes seguem o pattern **Arrange, Act, Assert**
   - Para mocks foi utilizado [**Mockito**](https://pub.dev/packages/mockito)
-  - **OBS**: devido ao tempo foi implementado o teste apenas do caso de uso de login
 - Autenticação com JWT
 - Caching com Decorator Pattern para listagem das imagens
 - Princípios SOLID
