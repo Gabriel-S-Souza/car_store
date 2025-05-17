@@ -49,7 +49,7 @@ O Car Store é um aplicativo Flutter para listar e gerenciar veículos em uma lo
 - State Management
 
 ### Como Executar
-O projeto requer que a Car Store Api esteja executando na sua rede. Siga os passos para executar a api em https://github.com/Gabriel-S-Souza/car_store_api.
+O projeto requer conexão com a Car Store Api. Siga os passos para executar a api em https://github.com/Gabriel-S-Souza/car_store_api.
 
 A versão do Flutter utilizada no projeto foi a 3.13.5.
 Clone este repositório para o seu ambiente de desenvolvimento:
